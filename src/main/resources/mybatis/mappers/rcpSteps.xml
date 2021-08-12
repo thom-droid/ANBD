@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="rcpSteps">
+
+	<!--  
+		임시저장 레시피 삭제하기
+		** 레시피를 삭제하려면 먼저 FK로 연결된 테이블 먼저 삭제해야함
+		dao 실행순서 rcps_items -> rcps_steps -> rcps->sauce -> rcps 
+		최초 작성일 : 0130 방
+		최종 수정 : 0130 방
+	-->
+	<delete id="deleteTmpRcpSteps" parameterType="int">
+		DELETE RCP_STEPS
+		WHERE recipe_no = #{tmpRcpNo}
+	</delete>
+	
+	<!--  21-02-18 김상언 요리 순서  -->
+	<select id="selectList" parameterType="int" resultType="RcpStep">
+		SELECT no, recipe_no recipeNo, img, content, regdate, sequence
+		FROM rcp_steps
+		WHERE recipe_no = #{recipeNo}
+		ORDER BY sequence
+	</select>
+</mapper>
+

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ktx.ddep.dao.MembersDAO">
+	<!--210125 양 로그인 -->
+	<select id="selectLogin" parameterType="Member"
+		resultType="Member">
+		SELECT no, email, password, name, nickname, phone_number phoneNumber,
+		gender, birth_date birthDate, profile_img profileImg, regdate,
+		marketkeeper_step marketkeeperStep, curr_points currPoints,
+		accu_points accuPoints, address_no addressNo, warning, start_day
+		startDay, login_count loginCount, tutorial, grade, rcp_warning
+		rcpWarning
+		FROM members
+		WHERE email=#{email} AND password=#{password}
+	</select>
+
+	<!--210123 양 랭킹 순위 가져오기 -->
+	<select id="selectTotalRankerList" parameterType="PageVO"
+		resultType="Member">
+		SELECT no, email, password, name, nickname, phoneNumber, gender, birthDate,
+		profileImg, regdate, marketkeeperStep, currPoints, accuPoints, grade,
+		addressNo, warning, startDay, loginCount, tutorial, rcpWarning, r
+		rankNum
+		FROM (SELECT no, email, password, name, nickname, phoneNumber, gender,
+		birthDate, profileImg, regdate, marketkeeperStep, currPoints,
+		accuPoints, grade, addressNo, warning, startDay, loginCount, tutorial,
+		rcpWarning, rownum r
+		FROM (SELECT no, email, password, name, nickname, phone_number
+		phoneNumber, gender, birth_date birthDate, profile_img profileImg,
+		regdate, marketkeeper_step marketkeeperStep, curr_points currPoints,
+		accu_points accuPoints, grade, address_no addressNo, warning,
+		start_day startDay, login_count loginCount, tutorial, rcp_warning
+		rcpWarning
+		FROM members
+		ORDER BY accuPoints DESC, regdate ASC)
+		)
+		WHERE r BETWEEN #{start} AND #{end}
+	</select>
+
+	<!--210123 양 총 회원수 가져오기 -->
+	<select id="selectTotal" resultType="int">
+		SELECT COUNT(*)
+		FROM members
+	</select>
+
+	<!--210126 양 주간 랭킹 순위 가져오기 -->
+	<select id="selectWeeklyRankList" parameterType="point"
+		resultType="Member">
+		SELECT no, email, password, name, nickname, phone_number phoneNumber,
+		gender, birth_date birthDate, profile_img profileImg, regdate,
+		marketkeeper_step marketkeeperStep,curr_points currPoints,accu_points
+		accuPoints, grade,address_no addressNo, warning,start_day
+		startDay,login_count loginCount, tutorial, sumPoint, rcp_warning
+		rcpWarning, rankNum
+		FROM members m, (SELECT memberNo, sumPoint, rownum rankNum
+		FROM(
+		SELECT member_no memberNo, SUM(point_amount) sumPoint
+		FROM points
+		WHERE accu_use_date between #{startDate} and #{endDate}
+		GROUP BY member_no
+		ORDER BY sumPoint DESC) p)
+		WHERE no = memberNo
+		ORDER BY ranknum
+	</select>
+
+
+	<!--210127 양 no로 member정보 가져오기 -->
+	<select id="selectOne" resultType="Member">
+		SELECT *
+		FROM members
+		WHERE no=#{no}
+	</select>
+
+	<!--210127 양 no로 전체랭킹 정보 가져오기 -->
+	<select id="selectTotalRankerOne" resultType="Member">
+		SELECT no, email, password, name, nickname, phoneNumber, gender, birthDate,
+		profileImg, regdate, marketkeeperStep, currPoints, accuPoints, grade,
+		addressNo, warning, startDay, loginCount, tutorial, rcpWarning, r
+		rankNum
+		FROM (SELECT no, email, password, name, nickname, phoneNumber, gender,
+		birthDate, profileImg, regdate, marketkeeperStep, currPoints,
+		accuPoints, grade, addressNo, warning, startDay, loginCount, tutorial,
+		rcpWarning, rownum r
+		FROM (SELECT no, email, password, name, nickname, phone_number
+		phoneNumber, gender, birth_date birthDate, profile_img profileImg,
+		regdate, marketkeeper_step marketkeeperStep, curr_points currPoints,
+		accu_points accuPoints, grade, address_no addressNo, warning,
+		start_day startDay, login_count loginCount, tutorial, rcp_warning
+		rcpWarning
+		FROM members
+		ORDER BY accuPoints DESC, regdate ASC)
+		)
+		WHERE no=#{no}
+	</select>
+
+	<!--210127 양 no로 주간 랭킹 순위 가져오기, 이럴꺼면 걍 이걸로 가져오는게? -->
+	<select id="selectWeeklyRankOne" parameterType="point"
+		resultType="Member">
+		SELECT no, email, password, name, nickname, phoneNumber, gender,birthDate,
+		profileImg, regdate, marketkeeperStep,currPoints,accuPoints, grade,
+		addressNo, warning,startDay, loginCount, tutorial, sumPoint,
+		rcpWarning, rankNum
+		FROM(SELECT no, email, password, name, nickname, phone_number phoneNumber,
+		gender, birth_date birthDate, profile_img profileImg, regdate,
+		marketkeeper_step marketkeeperStep,curr_points currPoints,accu_points
+		accuPoints, grade,address_no addressNo, warning,start_day
+		startDay,login_count loginCount, tutorial, sumPoint, rcp_warning
+		rcpWarning, rankNum
+		FROM members m, (SELECT memberNo, sumPoint, rownum rankNum
+		FROM(
+		SELECT member_no memberNo, SUM(point_amount) sumPoint
+		FROM points
+		WHERE accu_use_date between #{startDate} and #{endDate}
+		GROUP BY member_no
+		ORDER BY sumPoint DESC) p)
+		WHERE no = memberNo
+		ORDER BY ranknum)
+		WHERE no=#{no}
+	</select>
+
+	<!-- 2021-01-23 이소현 -->
+	<select id="selectCheckEmail" parameterType="string"
+		resultType="int">
+		SELECT COUNT(*)
+		FROM members
+		WHERE email = #{email}
+	</select>
+
+	<!-- 2021-01-23 이소현 -->
+	<select id="selectCheckNickname" parameterType="string"
+		resultType="int">
+		SELECT COUNT(*)
+		FROM members
+		WHERE nickname = #{nickname}
+	</select>
+
+	<!-- 2021-01-24 이소현 -->
+	<insert id="insertJoinMember" parameterType="Member">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			SELECT
+			members_seq.nextval
+			FROM dual
+		</selectKey>
+		<!-- 2021-01-25 이소현 (grade 컬럼명, 기본값 변경) -->
+		INSERT INTO MEMBERS(no, email, password, name, nickname, phone_number,
+		gender, birth_date, profile_img, regdate, marketkeeper_step,
+		curr_points, accu_points, address_no, grade)
+		VALUES(#{no}, #{email},
+		#{password}, #{name}, #{nickname}, #{phoneNumber}, #{gender},
+		#{birthDate}, 'profile.jpg', systimestamp, 'n', 0, 0, #{addressNo},
+		'f')
+	</insert>
+
+	<!-- 2021-01-31 02:21 이소현 -->
+	<select id="selectUserLocation" resultType="Address"
+		parameterType="int">
+		SELECT sido, gugun, dong
+		FROM members m, address addr
+		WHERE m.address_no = addr.no AND m.no=#{no}
+	</select>
+	
+	
+	<!--■□■□■□■□■□■□  0202부터 신규 작성  □■□■□■□■□■□■ -->
+	
+	<!--21-02-02 13:43 양 프로필 이미지 업로드  -->
+	<select id="updateProfileImg" parameterType="Member" resultType="int">		
+		UPDATE members
+		SET profile_img = #{profileImg}
+		WHERE no=#{no}	
+	</select>
+	
+	<!--21-02-02 13:44 양 프로필 기본이미지 업로드  -->
+	<select id="updateProfileImgDefault" parameterType="int" resultType="int">		
+		UPDATE members
+		SET profile_img = 'profile.jpg'
+		WHERE no=#{no}	
+	</select>
+
+	<!--21-02-02 15:09 양 닉네임 변경  -->
+	<select id="updateNickname" parameterType="Member" resultType="int">		
+		UPDATE members
+		SET nickname = #{nickname}
+		WHERE no=#{no}
+	</select>
+
+</mapper>
+

@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="rcps">
+
+<!--210129 양 레시피 전체 리스트 가져오기  -->
+<!-- <select id="selectList" parameterType="PageVO" resultType="Rcp">
+SELECT no, title, img, content, regdate, ribbon_item ribbonItem, member_no memberNo, status, rcps_avg rcpsAvg, view_count viewCount
+FROM RCPS
+WHERE no BETWEEN #{start} AND #{end}
+ORDER BY regdate DESC
+</select> -->
+
+<!--21-02-08 양 레시피 전체 리스트 가져오기+스크랩수 추가 + 멤버 닉네임, 프로필 이미지 -->
+<select id="selectList" parameterType="PageVO" resultType="Rcp">
+SELECT no,title, img, content, regdate, ribbonItem, memberNo, status, rcpsAvg, viewCount, scrapCount, nickname, profileImg, itemCount
+FROM(
+SELECT no,title, img, content, regdate, ribbonItem, memberNo, status, rcpsAvg, viewCount, scrapCount, nickname, profileImg, itemCount, rownum r
+FROM (
+SELECT r.no, title, img, content, r.regdate, ribbon_item ribbonItem, member_no memberNo, status, rcps_avg rcpsAvg, view_count viewCount,
+		(SELECT count(*) FROM rcps_saved WHERE recipe_no= r.no) scrapCount,(SELECT COUNT(*) FROM rcp_items WHERE recipe_no=r.no) itemCount, nickname , profile_img profileImg
+FROM RCPS r, members m
+WHERE r.member_no= m.no
+ORDER BY r.regdate DESC))
+WHERE r BETWEEN #{start} AND #{end}
+</select>
+
+<!--210129 양 레시피 전체 리스트 수  -->
+<select id="countRcps" resultType="int">
+SELECT COUNT(*)
+FROM RCPS
+WHERE status='c'
+</select>
+
+
+	<!--
+		최초 작성일: 0126 방
+		최종 수정일: 0129 방현수 
+		
+		1. 유저번호(memberNo)를 통해 유저가 쓴 레시피 번호 받아옴
+		2. 레시피 번호로 열람 레시피 번호 받아옴
+		3. 열람 레시피 번호 통해 요리후기와 열람번호를 조인하여 레시피, 요리후기 정보출력
+		** 적용: 내 레시피에 달린 요리후기, 내가 쓴 레시피
+	 -->
+	 <!--  내가 쓴 레시피 출력 -->
+	<select id="selectMyRcps" parameterType="int" resultType="Rcp">
+		SELECT 
+			rcps.no no, rcps.title title, rcps.img img, rcps.ribbon_item ribbonItem, rcps.member_no memberNo, 
+			m.nickname nickname, m.profile_img profileImg
+		FROM rcps, members m
+		WHERE rcps.member_no = m.no
+		AND rcps.status='c'
+		AND m.no = #{memberNo}
+	</select>
+
+	<!-- 
+		임시 저장 레시피 불러오기
+		최초 작성일 : 0129 방현수
+		최종 수정날짜 : 0129 방현수
+	 -->
+	 <select id="selectTmpRcps" parameterType="int" resultType="Rcp">
+	 	SELECT no, title, img
+		FROM rcps
+		WHERE status='w'
+		AND member_no = #{memberNo}
+		ORDER BY no
+	 </select>
+
+	<!--  
+		임시저장 레시피 삭제하기
+		** 레시피를 삭제하려면 먼저 FK로 연결된 테이블 먼저 삭제해야함
+		dao 실행순서 rcps_items -> rcps_steps -> rcps->sauce -> rcps 
+		최초 작성일 : 0130 방
+		최종 수정 : 0130 방
+	-->
+	<delete id="deleteTmpRcps" parameterType="int">
+		DELETE RCPS
+		WHERE no = #{tmpRcpNo}
+	</delete>
+
+
+	<!--
+		내가 열람한 레시피 불러오기
+	
+	  -->
+	  
+	  <!-- 김 0201 -->
+	  <select id="selectOne" parameterType="int" resultType="Rcp">
+		SELECT r.no, title, img, content,
+		r.regdate, ribbon_item ribbonItem, member_no memberNo,
+		m.profile_img,m.nickname,
+		(SELECT SUM(price)
+		FROM rcp_items
+		WHERE recipe_no = #{no}) price, rcps_avg rcpsAvg, view_count viewCount
+		FROM rcps r, members m
+		WHERE r.member_no = m.no
+		AND r.no = #{no}
+	</select>
+	
+	<!-- 
+		0204 방
+		요리후기 작성 후 레시피 평점 업데이트
+	 -->
+
+	<update id="updateRcpAvg" parameterType="Rcp">
+		UPDATE rcps
+		SET rcps_avg = #{rcpsAvg}
+		WHERE no = #{no}
+	</update>
+	
+	<!-- 
+		0204 방
+		스크랩한 레시피 번호 및 정보
+	 -->
+	<select id="selectSavedRcps" parameterType="int" resultType="Rcp">
+		SELECT 
+			r.no no, r.title title, r.img img, r.ribbon_item ribbonItem, r.rcps_avg rcpsAvg, r.view_count viewCount, 
+			m.no memberNo, m.nickname nickname, m.profile_img profileImg
+		FROM rcps r, members m, rcps_saved s
+		WHERE r.no = s.recipe_no
+		AND m.no = r.member_no
+		AND s.member_no = #{memberNo}
+		ORDER BY title
+	</select>
+	
+	
+	<!-- 
+		0204 방
+		레시피 스크랩된 횟수
+	 -->
+	 <select id="selectScrapCount" parameterType="int" resultType="int">
+		SELECT COUNT (DISTINCT s.member_no) scrapCount
+		FROM rcps_saved s, rcps r
+		WHERE r.no = s.recipe_no
+		AND s.recipe_no = #{no}
+	</select>
+	
+	
+	<!--  
+		0204 방
+		스크랩 레시피 삭제
+	-->
+	<delete id="deleteSavedRcp" parameterType="int">
+		DELETE rcps_saved
+		WHERE recipe_no = #{savedRcpNo}
+	</delete>
+	
+	
+	
+	<!--21-02-09 07:52 양 레시피 전체 리스트 스크랩 수로 가져오기
+		+스크랩수 추가 + 멤버 닉네임, 프로필 이미지
+		+스크랩수 정렬, 이전에 올린 순 정렬  -->
+<select id="selectListByScrap" parameterType="PageVO" resultType="Rcp">
+SELECT no,title, img, content, regdate, ribbonItem, memberNo, status, rcpsAvg, viewCount, scrapCount, nickname, profileImg, itemCount
+FROM(
+SELECT no,title, img, content, regdate, ribbonItem, memberNo, status, rcpsAvg, viewCount, scrapCount, nickname, profileImg, itemCount, rownum r
+FROM (
+SELECT r.no, title, img, content, r.regdate, ribbon_item ribbonItem, member_no memberNo, status, rcps_avg rcpsAvg, view_count viewCount,
+		(SELECT count(*) FROM rcps_saved WHERE recipe_no= r.no) scrapCount,(SELECT COUNT(*) FROM rcp_items WHERE recipe_no=r.no) itemCount, nickname , profile_img profileImg
+FROM RCPS r, members m
+WHERE r.member_no= m.no
+ORDER BY scrapCount DESC, r.regdate ASC))
+WHERE r BETWEEN #{start} AND #{end}
+</select>
+
+
+	<!--21-02-09 07:56 양 레시피 전체 리스트 스크랩 수로 가져오기
+		+스크랩수 추가 + 멤버 닉네임, 프로필 이미지
+		+조회수 정렬, 이전에 올린 순 정렬  -->
+<select id="selectListByView" parameterType="PageVO" resultType="Rcp">
+SELECT no,title, img, content, regdate, ribbonItem, memberNo, status, rcpsAvg, viewCount, scrapCount, nickname, profileImg, itemCount
+FROM(
+SELECT no,title, img, content, regdate, ribbonItem, memberNo, status, rcpsAvg, viewCount, scrapCount, nickname, profileImg, itemCount, rownum r
+FROM (
+SELECT r.no, title, img, content, r.regdate, ribbon_item ribbonItem, member_no memberNo, status, rcps_avg rcpsAvg, view_count viewCount,
+		(SELECT count(*) FROM rcps_saved WHERE recipe_no= r.no) scrapCount,(SELECT COUNT(*) FROM rcp_items WHERE recipe_no=r.no) itemCount, nickname , profile_img profileImg
+FROM RCPS r, members m
+WHERE r.member_no= m.no
+ORDER BY viewCount DESC, r.regdate ASC))
+WHERE r BETWEEN #{start} AND #{end}
+</select>
+
+
+<!--21-02-13 16:39 양 레시피 검색  -->
+<select id="selectListByKeyword" parameterType="PageVO" resultType="Rcp">
+SELECT no,title, img, content, regdate, ribbonItem, memberNo, status, rcpsAvg, viewCount, scrapCount, nickname, profileImg, itemCount,price
+FROM(
+SELECT no,title, img, content, regdate, ribbonItem, memberNo, status, rcpsAvg, viewCount, scrapCount, nickname, profileImg, itemCount, price, rownum r
+FROM (
+SELECT r.no, title, img, content, r.regdate, ribbon_item ribbonItem, member_no memberNo, status, rcps_avg rcpsAvg, view_count viewCount,
+		(SELECT count(*) FROM rcps_saved WHERE recipe_no= r.no) scrapCount,(SELECT COUNT(*) FROM rcp_items WHERE recipe_no=r.no) itemCount, (SELECT SUM(price) price FROM rcp_items WHERE recipe_no= r.no) price, nickname , profile_img profileImg
+FROM RCPS r, members m
+WHERE r.member_no= m.no AND status='c'
+<if test="keyword !=null">
+AND REGEXP_LIKE(title, #{keyword})
+</if>
+ORDER BY 
+<choose>
+<when test="choice == 'view'">
+viewCount DESC, r.regdate ASC
+</when>
+<when test="choice == 'scrap'">
+scrapCount DESC, r.regdate ASC
+</when>
+<otherwise>
+r.regdate DESC
+</otherwise>
+</choose>
+))
+WHERE r BETWEEN #{start} AND #{end}
+</select>
+
+
+<!--21-02-13 18:08 양 검색 레시피 전체 리스트 수  -->
+<select id="countRcpsByKeyword" parameterType="String" resultType="int">
+SELECT COUNT(*)
+FROM RCPS
+WHERE REGEXP_LIKE(title, #{keyword}) AND status='c'
+</select>
+
+
+<!--21-02-14 19:33 양 조회수 업데이트  -->
+<update id="updateViewCount" parameterType="int">
+UPDATE rcps
+SET view_count=view_count+1
+WHERE no=#{no}
+</update>
+	
+	
+
+
+</mapper>
+

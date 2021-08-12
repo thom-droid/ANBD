@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="trades">
+	<!-- 02.01_ 오경택 거래대기  -->
+	<select id="tradeOn" parameterType="int" resultType="hashmap">
+		SELECT trade.no no,
+		cast(trade.regdate as date) tradeDay,
+		trade.price_total tradePrice,
+		trade.status tStatus,
+		sell_imgs.img sellImg,
+		items.name iName,
+		items.measure iMeasure,
+		trade.qty tQty,
+		members.nickname buyerName,
+		members.profile_img buyerProfile
+		, (SELECT nickname FROM members WHERE members.no = sell.seller_no)
+		sellerName, (SELECT profile_img FROM members WHERE members.no =
+		sell.seller_no) sellerProfile
+		FROM TRADE, SELL, members,items,sell_imgs
+		WHERE trade.payment_no in(SELECT no FROM payment WHERE market_times_no=#{timeNo})
+		AND (trade.status='w' or trade.status='r')
+		AND SELL.no = TRADE.SELL_NO
+		AND members.nickname in(SELECT nickname FROM members WHERE trade.buyer_no
+		= members.no)
+		AND members.profile_img in(SELECT profile_img FROM members WHERE
+		trade.buyer_no = members.no)
+		AND items.no = sell.item_no
+		AND sell_imgs.sell_no = sell.no
+		AND sell_imgs.img in(SELECT min(img) FROM sell_imgs GROUP BY sell_no)
+		AND items.name in(SELECT name FROM items,sell WHERE sell.item_no =
+		items.no)
+	</select>
+	<!-- 02.01_ 오경택 승인대기 -->
+	
+	<!-- =========================== 0207 방 거래 대기 ============================ -->
+	
+	<!-- 유저가 판매하는 경우 -->
+	<select id="selectTradeWaitingAsSeller" parameterType="int" resultType="hashmap">
+		SELECT  DISTINCT(trade.no) no,
+		trade.price_total priceTotal, trade.qty qty, (trade.price_total/trade.qty) unitPrice,
+		sell_imgs.img sellImg, sell.no sellNo,
+		items.name itemName, 
+		items.measure itemMeasure,
+		markets.member_no marketNo, markets.name marketName, markets.img marketImg,
+		payment.trade_date tradeDay,
+		market_times.time marketTime
+		
+		FROM TRADE, SELL, members, items, sell_imgs, payment, markets, market_times
+		
+		WHERE sell.seller_no = #{memberNo}
+		AND trade.status='w'
+		AND SELL.no = TRADE.SELL_NO
+		AND items.no = sell.item_no
+		AND sell_imgs.sell_no = sell.no
+		AND sell_imgs.img in(SELECT min(img) FROM sell_imgs GROUP BY sell_no)
+		AND items.name in(SELECT name FROM items,sell WHERE sell.item_no = items.no)
+		AND trade.payment_no = payment.no
+		AND payment.market_times_no =market_times.no
+		AND market_times.member_no = markets.member_no
+		
+	</select>
+	
+	<!-- 유저가 구매하는 경우 -->
+	<select id="selectTradeWaitingAsBuyer" parameterType="int" resultType="hashmap">
+		SELECT  DISTINCT(trade.no) no,
+		trade.price_total priceTotal, trade.qty qty, (trade.price_total/trade.qty) unitPrice,
+		sell_imgs.img sellImg, sell.no sellNo,
+		items.name itemName, 
+		items.measure itemMeasure,
+		markets.member_no marketNo, markets.name marketName, markets.img marketImg,
+		payment.trade_date tradeDay,
+		market_times.time marketTime
+		
+		FROM TRADE, SELL, members, items, sell_imgs, payment, markets, market_times
+		
+		WHERE trade.buyer_no = #{memberNo}
+		AND trade.status='w'
+		AND SELL.no = TRADE.SELL_NO
+		AND items.no = sell.item_no
+		AND sell_imgs.sell_no = sell.no
+		AND sell_imgs.img in(SELECT min(img) FROM sell_imgs GROUP BY sell_no)
+		AND items.name in(SELECT name FROM items,sell WHERE sell.item_no = items.no)
+		AND trade.payment_no = payment.no
+		AND payment.market_times_no =market_times.no
+		AND market_times.member_no = markets.member_no
+	</select>
+	
+	
+	<!-- =========================== 0207 방 거래 완료 ============================ -->
+	
+	<!-- 판매한 경우. status만 c로 바꿈 -->
+	
+	<select id="selectTradeCompleteAsSeller" parameterType="int" resultType="hashmap">
+		SELECT  DISTINCT(trade.no) no,
+		trade.price_total priceTotal, trade.qty qty, (trade.price_total/trade.qty) unitPrice,
+		sell_imgs.img sellImg, sell.no sellNo,
+		items.name itemName, 
+		items.measure itemMeasure,
+		markets.member_no marketNo, markets.name marketName, markets.img marketImg,
+		payment.trade_date tradeDay,
+		market_times.time marketTime
+		
+		FROM TRADE, SELL, members, items, sell_imgs, payment, markets, market_times
+		
+		WHERE sell.seller_no = #{memberNo}
+		AND trade.status='c'
+		AND SELL.no = TRADE.SELL_NO
+		AND items.no = sell.item_no
+		AND sell_imgs.sell_no = sell.no
+		AND sell_imgs.img in(SELECT min(img) FROM sell_imgs GROUP BY sell_no)
+		AND items.name in(SELECT name FROM items,sell WHERE sell.item_no = items.no)
+		AND trade.payment_no = payment.no
+		AND payment.market_times_no =market_times.no
+		AND market_times.member_no = markets.member_no
+		
+	</select>
+	
+	<!-- 구매한 경우 -->
+	<select id="selectTradeCompleteAsBuyer" parameterType="int" resultType="hashmap">
+		SELECT  DISTINCT(trade.no) no,
+		trade.price_total priceTotal, trade.qty qty, (trade.price_total/trade.qty) unitPrice,
+		sell_imgs.img sellImg, sell.no sellNo,
+		items.name itemName, 
+		items.measure itemMeasure,
+		markets.member_no marketNo, markets.name marketName, markets.img marketImg,
+		payment.trade_date tradeDay,
+		market_times.time marketTime
+		
+		FROM TRADE, SELL, members, items, sell_imgs, payment, markets, market_times
+		
+		WHERE sell.seller_no = #{memberNo}
+		AND trade.status='c'
+		AND SELL.no = TRADE.SELL_NO
+		AND items.no = sell.item_no
+		AND sell_imgs.sell_no = sell.no
+		AND sell_imgs.img in(SELECT min(img) FROM sell_imgs GROUP BY sell_no)
+		AND items.name in(SELECT name FROM items,sell WHERE sell.item_no = items.no)
+		AND trade.payment_no = payment.no
+		AND payment.market_times_no =market_times.no
+		AND market_times.member_no = markets.member_no
+		
+	</select>
+</mapper>
+

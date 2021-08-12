@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="markets">
+
+	<!--210127 양 memberNo로 마켓 정보 얻어오기 (서비스지수 얻기) -->
+	<select id="selectOne" resultType="Market">
+		SELECT member_no memberNo, name, img, service_idx
+		serviceIdx,regdate,address_no addressNo
+		FROM markets
+		WHERE member_no = #{mamberNo}
+	</select>
+
+	<!-- 02.01_ 오경택 장터의 기본정보 -->
+	<select id="market" parameterType="int" resultType="hashmap">
+		SELECT member_no memberNo,markets.name name, members.nickname nickname,
+		members.profile_img profileImg, markets.service_idx serviceIdx,
+		markets.img img,sido,gugun,dong,detail_address detailAddress,lat,lng
+		FROM markets,members,address
+		WHERE member_no=#{no} and member_no = members.no and address.no =
+		markets.address_no
+	</select>
+
+	<!--2021-01-30 22:36 이소현 -->
+	<select id="selectSidoList" resultType="string">
+		SELECT sido
+		FROM address
+		addr, markets mar
+		WHERE mar.address_no = addr.no
+		group by sido
+	</select>
+
+	<!--2021-01-30 22:36 이소현 -->
+	<select id="selectGugunList" resultType="string">
+		SELECT gugun
+		FROM address
+		addr, markets mar
+		WHERE mar.address_no = addr.no
+		group by gugun
+	</select>
+
+	<!--2021-01-30 22:36 이소현 -->
+	<select id="selectDongList" resultType="string">
+		SELECT dong
+		FROM address
+		addr, markets mar
+		WHERE mar.address_no = addr.no
+		group by dong
+	</select>
+	
+	<!--21-02-02 17:56 이소현 _ 로그인 한 유저의 주소와 동일한 주소 값을 갖는 장터 리스트   -->
+	<select id="selectUserLocationMarkets" parameterType="int" resultType="hashmap">
+		SELECT mar.member_no, addr.sido, addr.gugun, addr.dong
+		FROM markets mar, address addr
+		WHERE address_no = (SELECT no
+							FROM address
+							WHERE sido = (SELECT address.sido FROM MEMBERS, address WHERE members.no= #{no} and members.address_no = address.no)
+ 								and gugun = (SELECT address.gugun FROM MEMBERS, address WHERE members.no= #{no} and members.address_no = address.no)
+ 								and dong = (SELECT address.dong FROM MEMBERS, address WHERE members.no= #{no} and members.address_no = address.no)
+ 								and no IN (SELECT address_no FROM markets))
+ 			AND mar.address_no = addr.no
+	</select>
+
+
+	<!-- 21-02-05 이소현 _ 장터에서 판매되는 재료  _ item으로 이동해보자!
+	<select id="selectSellingItemList" parameterType="int" resultType="string">
+		SELECT distinct items.name itemName
+		FROM sell_times times, markets mar, sell, items
+		WHERE mar.member_no = times.market_no AND times.confirm_status ='w'
+				 AND times.sell_no = sell.no AND sell.item_no = items.no AND market_no = #{marketNo}
+	</select> -->
+	
+	<!-- 21-02-10 01:01 이소현 _ 재료 선택하면 나타나는 장터 hashmap으로 -->
+	<select id="selectSelectedItemMarketList" parameterType="MarketList" resultType="hashmap">
+		SELECT distinct mar.member_no marketNo, mar.name name, mem.nickname nickname, mem.profile_img profileImg, 
+				mar.service_idx serviceIdx, mar.img img, lat, lng
+		FROM  sell_times times, markets mar, sell, items, address addr, members mem
+		WHERE mar.address_no = addr.no AND addr.sido= #{sido} AND addr.gugun= #{gugun} AND addr.dong=#{dong}
+			AND member_no = mem.no AND mar.member_no = times.market_no AND times.confirm_status ='w' AND times.sell_no = sell.no AND sell.item_no = items.no 
+			AND items.name =#{item}
+	</select>
+
+
+</mapper>
+

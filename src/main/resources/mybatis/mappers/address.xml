@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="address">
+
+	<!--210127 양 no로 주소 정보 얻어오기 -->
+	<select id="selectOne" resultType="Address">
+		SELECT no, sido, gugun, dong, detail_address detailAddress, lat, lng,
+		regdate
+		FROM address
+		WHERE no=#{no}
+
+	</select>
+
+	<!-- 2021-01-24 이소현 -->
+	<insert id="insertAddress" parameterType="Address">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			SELECT
+			address_seq.nextval
+			FROM dual
+		</selectKey>
+		INSERT INTO ADDRESS(no, sido, gugun, dong, lat, lng, regdate)
+		VALUES(#{no}, #{sido}, #{gugun}, #{dong}, #{lat}, #{lng},
+		systimestamp)
+	</insert>
+	
+	
+	<!--■□■□■□■□■□■□  0202부터 신규 작성  □■□■□■□■□■□■ -->
+
+	<select id="selctLocationDefault">
+		SELECT sido, gugun, dong
+		FROM address
+		GROUP BY sido, gugun, dong
+	</select>
+	
+	<!--21-02-02 10:06 수정 / 2021-01-30 22:36 이소현 -->
+	<select id="selectSidoList" resultType="string">
+		SELECT sido
+		FROM address addr, markets mar
+		WHERE mar.address_no = addr.no
+		GROUP BY sido
+	</select>
+
+	
+	<!--21-02-03 17:54 양 주소 업데이트  -->
+	<select id="updateAddress" parameterType="Address" resultType="Address">
+	UPDATE address
+	SET sido= #{sido}, gugun=#{gugun}, dong=#{dong}, lat=#{lat} , lng=#{lng} ,regdate=systimestamp
+	WHERE no=#{no}
+	
+	</select>
+	
+	<!--21-02-02 10:06 수정 / 2021-01-30 22:36 이소현 -->
+	<select id="selectGugunList" parameterType="string"
+		resultType="string">
+		SELECT gugun
+		FROM address addr, markets mar
+		WHERE mar.address_no = addr.no and sido=#{sido}
+		GROUP BY gugun
+	</select>
+
+	<!--21-02-02 10:06 수정 / 2021-01-30 22:36 이소현 -->
+	<select id="selectDongList" parameterType="Address" resultType="string">
+		SELECT dong
+		FROM address addr, markets mar 
+		WHERE mar.address_no = addr.no AND sido = #{sido} AND gugun = #{gugun}
+		GROUP BY dong
+	</select>
+	
+		<!-- 21-02-08 01:23 이소현 _ 수정(resultType 변경) /21-02-03 21:43 이소현 _ 지역 변경하면 바뀌는 장터 리스트  -->
+	<select id="selectSelectedLocationdMarketLsit" resultType="hashmap" parameterType="Address">
+		SELECT mar.member_no marketNo, mar.name name, mem.nickname nickname, mem.profile_img profileImg, 
+		mar.service_idx serviceIdx, mar.img img, lat, lng
+		FROM markets mar, address addr, members mem
+		WHERE mar.address_no = addr.no AND addr.sido= #{sido} AND addr.gugun= #{gugun} AND addr.dong= #{dong}
+			and member_no = mem.no
+	</select>
+
+	
+
+
+
+</mapper>
+

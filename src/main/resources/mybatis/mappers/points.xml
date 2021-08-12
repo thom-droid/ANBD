@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="points">
+
+	<!--210124 양 주간 랭킹을 위한 기간별 포인트 얻기 -->
+	<select id="selectWeeklyTotal" parameterType="Point"
+		resultType="Point">
+		SELECT no,accu_use_date accuUseDate, member_no memberNo, regdate,
+		point_amount pointAmount, point_type pointType, reference_key
+		referenceKey, points_status pointStatus
+		FROM points
+		WHERE accu_use_date between #{startDate} and #{endDate}
+	</select>
+
+
+	<!--21-02-05 09:57 양 포인트 누적 내역 받기 -->
+	<select id="selectAccuPoint" parameterType="int"
+		resultType="Point">
+		SELECT no, accuUseDate, memberNo, regdate, pointAmount, pointType,
+		referenceKey, pointStatus
+		FROM(
+		SELECT no, accuUseDate, memberNo, regdate, pointAmount, pointType,
+		referenceKey, pointStatus, rownum r
+		FROM(
+		SELECT no, accu_use_date accuUseDate, member_no memberNo, regdate,
+		point_amount pointAmount, point_type pointType, reference_key
+		referenceKey, points_status pointStatus
+		FROM POINTS
+		WHERE points_status = 'a' AND member_no=#{memberNo}
+		ORDER BY regdate DESC))
+		WHERE regdate BETWEEN #{start} AND #{end}
+		ORDER BY r
+	</select>
+
+	<!--21-02-05 09:57 양 포인트 사용 내역 받기 -->
+	<select id="selectList" parameterType="PageVO"	resultType="Point">
+		SELECT no, accuUseDate, memberNo, regdate, pointAmount, pointType, referenceKey, pointStatus, r
+		FROM(SELECT no, accuUseDate, memberNo, regdate, pointAmount, pointType, referenceKey, pointStatus, rownum r
+			 FROM(  SELECT no, accu_use_date accuUseDate, member_no memberNo, regdate, point_amount pointAmount, 
+			 			  point_type pointType, reference_key referenceKey, points_status pointStatus
+				    FROM POINTS
+					WHERE points_status = #{pointsStatus} AND member_no=#{memberNo}
+			 		ORDER BY regdate DESC))
+		WHERE r BETWEEN #{start} AND #{end}
+	</select>
+	
+	
+	<!--  
+	0203 방
+	요리후기 작성 시 포인트 적립
+-->
+		
+
+	<insert id="insertRvPoint" parameterType="Point">
+		INSERT INTO points (no, accu_use_date, member_no, regdate, point_amount, point_type, reference_key, points_status)
+		VALUES (points_seq.nextval, systimestamp, #{memberNo}, systimestamp, 300, 'r', #{referenceKey}, 'a')
+	</insert>
+
+
+
+</mapper>
+

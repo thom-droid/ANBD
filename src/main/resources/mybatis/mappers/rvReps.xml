@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="rvReps">
+
+	<!-- 0129 방
+		요리후기 신고하기-->
+	<insert id="insertRvReps" parameterType="RvRep">
+		INSERT INTO rv_REPS (no, type, content, regdate, review_no)
+		VALUES(rv_reps_seq.nextval, #{type}, #{content}, systimestamp, #{reviewNo})
+	</insert>
+</mapper>
+

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sellImgs">
+	<select id="selectSellImgs" parameterType="int" resultType="SellImg">
+		SELECT no, img
+		FROM sell_imgs
+		WHERE sell_no = #{sellNo}
+	</select>
+	
+	<!-- 0217 방 이미지 입력  -->
+	<insert id="insertSellImgs" parameterType="SellImg">
+		INSERT INTO SELL_IMGS (no, sell_no, regdate, img)
+		VALUES(sell_imgs_seq.nextval, #{sellNo}, systimestamp, #{img})
+	
+	</insert>
+</mapper>
+

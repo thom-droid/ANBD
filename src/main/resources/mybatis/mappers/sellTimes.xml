@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sellTimes">
+	<!-- 승인요청한 판매자들의 프로필사진과 닉네임 -->
+	<select id="memberInfo" parameterType="int" resultType="hashmap">
+	SELECT distinct members.no memberNo,members.nickname memberNickname,members.profile_img profileImg
+	FROM sell_times, members
+	WHERE market_no=#{marketNo} and members.no = sell_times.seller_no and confirm_status='w' 
+	</select>
+	<!-- 승인요청한 시간대 -->
+	<select id="sellTimeList" parameterType="hashmap" resultType="hashmap">
+	SELECT distinct market_times.time marketTime
+	FROM sell_times,market_times
+	WHERE seller_no = #{sellerNo} and confirm_status='w' and market_no = #{marketNo} and market_time_no = market_times.no
+	ORDER BY time
+	</select>
+	<!-- 02.01_ 오경택 판매자들이 요청한 상품목록 -->
+	<select id="requestItemList" parameterType="hashmap" resultType="hashmap">
+	SELECT distinct sell.no sellNo,sell_imgs.img sellImg, sell.receipt_img receiptImg, items.name itemName, items.measure itemMeasure, sell.qty sellQty, sell.max_price sellMaxPrice, sell_times.purchase_date purchaseDate
+	FROM sell_times,sell,items,sell_imgs
+	WHERE sell_times.seller_no = #{sellerNo} 
+	AND sell_times.confirm_status='w' 
+	AND sell_times.market_no = #{marketNo} 
+	AND sell.no = sell_times.sell_no
+	AND items.no = sell.item_no
+	AND sell_imgs.sell_no = sell.no
+	AND sell_imgs.img in(SELECT min(img) FROM sell_imgs GROUP BY sell_no)
+	</select>
+</mapper>
+

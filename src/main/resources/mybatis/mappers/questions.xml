@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="questions">
+	<!-- 2021-01-24 이소현 -->
+	<select id="selectQnaList" resultType="Question">
+		SELECT no, title, content,
+		TO_CHAR(regdate, 'YYYY-MM-DD HH24:mm') regdate , member_no memberNo,
+		status, question_kind questionKind
+		FROM QUESTION
+		ORDER BY 1 desc
+	</select>
+
+	<!-- 2021-01-24 이소현 -->
+	<insert id="insertQuestion" parameterType="Question">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			SELECT
+			question_seq.nextval
+			FROM dual
+		</selectKey>
+		INSERT INTO QUESTION (no, title, content, regdate, member_no, status,
+		question_kind)
+		VALUES (#{no}, #{title}, #{content}, systimestamp,
+		#{memberNo},'미완료', #{questionKind})
+	</insert>
+
+	<!-- 2021-01-24 이소현 -->
+	<delete id="deleteQna" parameterType="int">
+		DELETE question
+		WHERE no = #{no}
+	</delete>
+
+	<!-- 2021-01-29 00:07 이소현 -->
+	<select id="selectOneList" resultType="Question"
+		parameterType="int">
+		SELECT no, title, content, TO_CHAR(regdate, 'YYYY-MM-DD
+		HH24:mm') regdate , member_no memberNo, status, question_kind
+		questionKind
+		FROM QUESTION
+		WHERE no = #{no}
+	</select>
+
+</mapper>
+

@@ -11,11 +11,11 @@
 			<a class="circle recipe_regist" title="레시피 작성하기"
 				href="/recipeRegisterPage.jsp"><i class="fas fa-pen"></i></a> <span
 				class="circle user"><img class="circle_user_img"
-				src="resources/img/profileImg/profile.jpg"></span>			
+				src="resources/static/img/profileImg/profile.jpg"></span>			
 			<a id="login" href="/login.jsp">로그인</a>
 		</div>
 		</ul>
-        <span class="logo"><a href="/ddep/"><img src="resources/img/logo.png"/></a></span>
+        <span class="logo"><a href="/ddep/"><img src="resources/static/img/logo.png"/></a></span>
         
         <div class="right user_menu hidden">
             <div class="user_menu_item"><a href="/mypageHeader.jsp?no=">마이페이지</a></div>

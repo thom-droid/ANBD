@@ -12,17 +12,17 @@
 <body>
 <div id="contents">
     <div id="logo">
-        <img src="resources/img/anbd_resources/logo.png"/>
+        <img src="resources/static/img/anbd_resources/logo.png"/>
     </div>
-    <form action="/login.ktx" method="post">
+    <form action="/log" method="post">
     	<!-- msg가 있으면 출력 -->
         <p id="resultLogin"></p>
         <p id="loginId">
-            <input type="text"  id="id" name="email" placeholder="ktganzi@gmail.com"/><br/>
+            <input type="text" id="id" name="email" placeholder="ktganzi@gmail.com"/><br/>
             <span class="check_id check"></span>
         </p>
         <p>
-            <input type="password" id="password"  name="password" placeholder="비밀번호를 입력해주세요"/><br />
+            <input type="password" id="password" name="password" placeholder="비밀번호를 입력해주세요"/><br />
             <span class="check_pass check"></span>
         </p>
         <p class="check">
@@ -42,7 +42,7 @@
         </p>
     </form>
 </div>
-<script src="resources/js/jquery.js"></script>
-<script src="resources/js/login.js"></script> 
+<script src="resources/static/js/jquery.js"></script>
+<script src="resources/static/js/login.js"></script> 
 </body>
 </html>

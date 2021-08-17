@@ -30,9 +30,9 @@ release.properties
 .classpath
 
 # resources
-webapp/resources/css/*
-webapp/resources/img/*
-webapp/resources/webfonts/*
+webapp/resources/static/css/*
+webapp/resources/static/img/*
+webapp/resources/static/webfonts/*
 webapp/META-INF
 
 .springBeans

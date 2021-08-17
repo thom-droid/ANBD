@@ -8,8 +8,8 @@
 
 <%@ include file="/WEB-INF/template/link.jsp" %>
 
-<link rel="stylesheet" href="resources/css/paginate.css">
-<link rel="stylesheet" href="resources/css/index.css">
+<link rel="stylesheet" href="resources/static/css/paginate.css">
+<link rel="stylesheet" href="resources/static/css/index.css">
 
 
 </head>
@@ -19,7 +19,7 @@
 <!-- ========================히어로 이미지 + 소개글 part==================================== -->
     <div class="contents_wrap">
         <div class="hero_img_content">
-            <img id="heroImg" src="resources/img/anbd_resources/hero3.jpg">
+            <img id="heroImg" src="resources/static/img/anbd_resources/hero3.jpg">
 
             <div class="introduction_wrap">
                 <p><span class="introduction_point_text">아</span>까운 재료</p>
@@ -176,6 +176,6 @@
 
 
 <%@ include file="/WEB-INF/template/bottom.jsp"%>
-<script src="resources/js/header.js"></script>
+<script src="resources/static/js/header.js"></script>
 </body>
 </html>

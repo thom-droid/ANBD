@@ -10,5 +10,5 @@
             </div>
         </div>
 
-<script src="resources/js/jquery.js"></script>
-<script src="resources/js/underscore-min.js"></script>
+<script src="resources/static/js/jquery.js"></script>
+<script src="resources/static/js/underscore-min.js"></script>

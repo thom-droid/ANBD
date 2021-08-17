@@ -16,11 +16,17 @@ public class MemberController {
 	@Autowired
 	private MembersService membersService;
 	
-	@GetMapping(path={"/main","/"})
+	@GetMapping(path="/")
 	public String main() {
-		return "main";
+		return "index";
 	}
-
+	
+	//login page
+	@GetMapping("/login")
+	public String login_page() {
+		return "login";
+	}
+	
 	@GetMapping("/testjson/{no}")
 	@ResponseBody
 	public Member member_info(@PathVariable int no){

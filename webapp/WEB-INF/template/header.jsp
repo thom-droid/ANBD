@@ -15,7 +15,7 @@
 			<a id="login" href="/login.jsp">로그인</a>
 		</div>
 		</ul>
-        <span class="logo"><a href="/ddep/"><img src="resources/static/img/logo.png"/></a></span>
+        <span class="logo"><a href="/"><img src="resources/static/img/anbd_resources/logo.png"/></a></span>
         
         <div class="right user_menu hidden">
             <div class="user_menu_item"><a href="/mypageHeader.jsp?no=">마이페이지</a></div>

@@ -1,9 +1,15 @@
-package com.ktx.ddep.vo;
+package com.ktx.ddep.dto.member;
 
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
+import com.ktx.ddep.security.UserEntity;
+
+import lombok.Builder;
+import lombok.Getter;
+
+@Getter
 public class Member {
 	private int no, currPoints, accuPoints, addressNo, loginCount, /* 210122 양 랭킹 순위 */ rankNum,
 			/* 210126 양 주간 랭킹 합산포인트 */sumPoint;
@@ -13,8 +19,7 @@ public class Member {
 	private Date birthDate, startDay;
 	private Timestamp regdate;
 	private Double lat, lng;
-
-	// 2021-01-24 이소현
+	private int nowYear;
 	private Calendar calendar;
 
 	public Calendar getCalendar() {
@@ -31,16 +36,6 @@ public class Member {
 
 	public void setNowYear(int nowYear) {
 		this.nowYear = nowYear;
-	}
-
-	private int nowYear;
-
-	public Member() {
-
-		calendar = Calendar.getInstance();
-
-		nowYear = calendar.get(Calendar.YEAR);
-
 	}
 
 	public int getRankNum() {
@@ -67,24 +62,9 @@ public class Member {
 		this.marketkeeperStep = marketkeeperStep;
 	}
 
-	// 로그인
-	public Member(String email, String password) {
-		this.email = email;
-		this.password = password;
-	}
 
-	// 회원가입
-	public Member(int addressNo, String email, String password, String name, String nickname, String phoneNumber,
-			char gender, Date birthDate) {
-		this.addressNo = addressNo;
-		this.email = email;
-		this.password = password;
-		this.name = name;
-		this.nickname = nickname;
-		this.phoneNumber = phoneNumber;
-		this.gender = gender;
-		this.birthDate = birthDate;
-	}
+
+	
 
 	public int getNo() {
 		return no;
@@ -355,5 +335,33 @@ public class Member {
 		return "<img src=\"img/icon" + iconName + ".png\" alt=\"" + iconName + "\">";
 
 	}
+	
+	// return as entity
+	public UserEntity toEntity() {
+		return UserEntity.builder()
+				.loginUserId(email)
+				.password(password)
+				.build();
+	}
 
+	// constructor with no args but with calendar instance
+	public Member() {
+		calendar = Calendar.getInstance();
+		nowYear = calendar.get(Calendar.YEAR);
+	}
+	
+	// constructor for sign up
+	@Builder
+	public Member(int addressNo, String email, String password, String name, String nickname, String phoneNumber,
+			char gender, Date birthDate) {
+		this.addressNo = addressNo;
+		this.email = email;
+		this.password = password;
+		this.name = name;
+		this.nickname = nickname;
+		this.phoneNumber = phoneNumber;
+		this.gender = gender;
+		this.birthDate = birthDate;
+	}
+	
 }

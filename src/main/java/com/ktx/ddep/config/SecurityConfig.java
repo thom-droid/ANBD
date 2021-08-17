@@ -20,32 +20,36 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
     CustomUserDetailsService customUserDetailsService;
 
+	//ignore static resources
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers(
-                "/webjars/**");
+                "/resources/static/**");
     }
 
+    // use customUserDetailService as authentication data
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(customUserDetailsService);
     }
 
+    // configure 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/", "/main", "/members/loginerror", "/members/joinform", "/members/join", "/members/welcome").permitAll()
-                .antMatchers("/securepage", "/members/**").hasRole("USER")
-                .anyRequest().authenticated()
-                .and()
+                .csrf().disable() // currently disabled for application run
+                .authorizeRequests() // authorization per url
+                .antMatchers("/", "/login","/loginerror", "/signup", "/join","/update/pw").permitAll() // anyone allowed
+                .antMatchers("/secured/test", "/members/**").hasRole("USER") // only user allowed   
+                .antMatchers("/market").hasRole("MARKETKEEPER") // only marketkeeper allowed
+                .anyRequest().authenticated() // anyone else need to be authenticated
+                .and() // login and logout configuration
                     .formLogin()
-                    .loginPage("/members/loginform")
-                    .usernameParameter("userId")
+                    .loginPage("/login") // url for view
+                    .usernameParameter("email")
                     .passwordParameter("password")
                     .loginProcessingUrl("/authenticate")
-                    .failureForwardUrl("/members/loginerror?login_error=1")
+                    .failureForwardUrl("/loginerror?login_error=1")
                     .defaultSuccessUrl("/",true)
                     .permitAll()
                 .and()
@@ -54,6 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .logoutSuccessUrl("/");
     }
 
+    // password encoder
     @Bean
     public PasswordEncoder encoder() {
         return new BCryptPasswordEncoder();

@@ -1,25 +1,18 @@
 package com.ktx.ddep.security;
 
+import lombok.Builder;
+import lombok.Getter;
+
+@Getter
 public class UserRoleEntity {
 
-	private String userLoginId;
+	private String email;
 	private String roleName;
 	
-	public String getUserLoginId() {
-		return userLoginId;
-	}
-	public void setUserLoginId(String userLoginId) {
-		this.userLoginId = userLoginId;
-	}
-	public String getRoleName() {
-		return roleName;
-	}
-	public void setRoleName(String roleName) {
-		this.roleName = roleName;
-	}
-	public UserRoleEntity(String userLoginId, String roleName) {
+	@Builder
+	public UserRoleEntity(String email, String roleName) {
 		super();
-		this.userLoginId = userLoginId;
+		this.email = email;
 		this.roleName = roleName;
 	}
 	 

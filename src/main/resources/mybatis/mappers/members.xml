@@ -2,7 +2,7 @@
 <!DOCTYPE mapper 
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ktx.ddep.dao.MembersDAO">
+<mapper namespace="com.ktx.ddep.dao.member.MembersDAO">
 	<!--210125 양 로그인 -->
 	<select id="selectLogin" parameterType="Member"
 		resultType="Member">
@@ -184,6 +184,38 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SET nickname = #{nickname}
 		WHERE no=#{no}
 	</select>
+	
+	<!-- login data for security -->
+	<select id="selectById" parameterType="String" resultType="Member">
+		SELECT no, email, password, name, nickname, phone_number phoneNumber,
+			gender, birth_date birthDate, profile_img profileImg, regdate,
+			marketkeeper_step marketkeeperStep, curr_points currPoints,
+			accu_points accuPoints, address_no addressNo, rcp_warning rcpWarning, start_day startDay, 
+            login_count loginCount, tutorial
+		FROM members
+		WHERE email= #{email}
 
+	</select>
+	
+	<select id="selectRoleById" parameterType="String" resultType="MemberRole">
+		SELECT mr.no no, mr.role_name roleName, mr.member_no memberNo
+		FROM members_role mr
+		JOIN members m
+		ON m.no = mr.member_no
+		WHERE m.email = #{email}
+	</select>
+
+	<!-- this is only for updating password that were already registered without encoding -->
+	<select id="selectPassword" resultType="Member">
+		SELECT no, password
+		FROM members
+	</select>
+	
+	<select id="updatePassword" parameterType="Member">
+		UPDATE members
+		SET password =#{password}
+		WHERE no = #{no}
+	</select>
+	
 </mapper>
 

@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>로그인페이지</title>
-    <link rel="stylesheet" href="resources/css/login.css" />
+    <link rel="stylesheet" href="resources/static/css/login.css" />
     <%@ include file="/WEB-INF/template/link.jsp" %>
         
 </head>
@@ -14,7 +14,7 @@
     <div id="logo">
         <img src="resources/static/img/anbd_resources/logo.png"/>
     </div>
-    <form action="/log" method="post">
+    <form action="/authenticate" method="post">
     	<!-- msg가 있으면 출력 -->
         <p id="resultLogin"></p>
         <p id="loginId">
@@ -22,7 +22,7 @@
             <span class="check_id check"></span>
         </p>
         <p>
-            <input type="password" id="password" name="password" placeholder="비밀번호를 입력해주세요"/><br />
+            <input id="password" name="password" placeholder="비밀번호를 입력해주세요"/><br />
             <span class="check_pass check"></span>
         </p>
         <p class="check">

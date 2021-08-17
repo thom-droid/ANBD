@@ -1,12 +1,15 @@
-package com.ktx.ddep.dao;
+package com.ktx.ddep.dao.member;
 
 import java.util.List;
 
-import com.ktx.ddep.vo.Address;
-import com.ktx.ddep.vo.Member;
-import com.ktx.ddep.vo.PageVO;
-import com.ktx.ddep.vo.Point;
 import org.apache.ibatis.annotations.Mapper;
+
+import com.ktx.ddep.dto.PageVO;
+import com.ktx.ddep.dto.member.Address;
+import com.ktx.ddep.dto.member.Member;
+import com.ktx.ddep.dto.member.MemberRole;
+import com.ktx.ddep.dto.member.Point;
+import com.ktx.ddep.security.UserRoleEntity;
 
 @Mapper
 public interface MembersDAO {
@@ -55,4 +58,19 @@ public interface MembersDAO {
 
 		// 2021-02-02 15:11 양 닉네임 변경
 		public int updateNickname(Member member);// updateNickname() end
+		
+		// data for security
+		
+		// check user data
+		public Member selectById(String loginId);
+		
+		// check user role
+		public List<MemberRole> selectRoleById(String email);
+
+		public List<Member> selectPassword();
+
+		public void updatePassword(Member m);
+		
+		
+		
 }

@@ -10,60 +10,37 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	</settings>
 
 	<typeAliases>
-		<typeAlias type="com.ktx.ddep.vo.MarketTime" alias="MarketTime"/>
-		<typeAlias type="com.ktx.ddep.vo.Payment" alias="Payment"/>
-		<typeAlias type="com.ktx.ddep.vo.Point" alias="Point"/>
-		<typeAlias type="com.ktx.ddep.vo.Question" alias="Question"/>
-		<typeAlias type="com.ktx.ddep.vo.Trade" alias="Trade"/>
-		<typeAlias type="com.ktx.ddep.vo.TradeRV" alias="TradeRV"/>
-		<typeAlias type="com.ktx.ddep.vo.Rcp" alias="Rcp"/>
-		<typeAlias type="com.ktx.ddep.vo.RcpItem" alias="RcpItem"/>
-		<typeAlias type="com.ktx.ddep.vo.RcpOpen" alias="RcpOpen"/>
-		<typeAlias type="com.ktx.ddep.vo.RcpRep" alias="RcpRep"/>
-		<typeAlias type="com.ktx.ddep.vo.Member" alias="Member"/>
-		<typeAlias type="com.ktx.ddep.vo.PageVO" alias="PageVO"/>
-		<typeAlias type="com.ktx.ddep.vo.Point" alias="Point"/>
-		<typeAlias type="com.ktx.ddep.vo.Market" alias="Market"/>
-		<typeAlias type="com.ktx.ddep.vo.Address" alias="Address"/>
-		<typeAlias type="com.ktx.ddep.vo.RcpRv" alias="RcpRv"/>
-		<typeAlias type="com.ktx.ddep.vo.Sell" alias="Sell"/>
-		<typeAlias type="com.ktx.ddep.vo.SellImg" alias="SellImg"/>
-		<typeAlias type="com.ktx.ddep.vo.Item" alias="Item"/>
-		<typeAlias type="com.ktx.ddep.vo.RvRep" alias="RvRep"/>
-		<typeAlias type="com.ktx.ddep.vo.MarketList" alias="MarketList"/>
-		<typeAlias type="com.ktx.ddep.vo.RcpSauce" alias="RcpSauce"/>
-		<typeAlias type="com.ktx.ddep.vo.RcpStep" alias="RcpStep"/>
-	</typeAliases>
-
-
-	<!-- mapper 경로 설정 -->
-<!-- 	<mappers>
-		<mapper resource="/mappers/members.xml"/>
-	</mappers> -->
-<!--	<mappers>
+		<!-- member package -->
+		<typeAlias type="com.ktx.ddep.dto.member.Address" alias="Address"/>
+		<typeAlias type="com.ktx.ddep.dto.member.Member" alias="Member"/>
+		<typeAlias type="com.ktx.ddep.dto.member.MemberRole" alias="MemberRole" />
+		<typeAlias type="com.ktx.ddep.dto.member.Payment" alias="Payment"/>
+		<typeAlias type="com.ktx.ddep.dto.member.Point" alias="Point"/>
+		<typeAlias type="com.ktx.ddep.dto.member.Question" alias="Question"/>
 		
-		<mapper resource="com/ktx/ddep/mapper/markets.xml"/>
-		<mapper resource="com/ktx/ddep/mapper/address.xml"/>
-		<mapper resource="com/ktx/ddep/mapper/marketTimes.xml" />
-		<mapper resource="com/ktx/ddep/mapper/payments.xml" />
-		<mapper resource="com/ktx/ddep/mapper/points.xml" />
-		<mapper resource="com/ktx/ddep/mapper/questions.xml" />
-		<mapper resource="com/ktx/ddep/mapper/trades.xml" />
-		<mapper resource="com/ktx/ddep/mapper/tradeRVs.xml" />
-		<mapper resource="com/ktx/ddep/mapper/items.xml" />
-		<mapper resource="com/ktx/ddep/mapper/sells.xml" />
-		<mapper resource="com/ktx/ddep/mapper/rcps.xml" />
-		<mapper resource="com/ktx/ddep/mapper/rcpsOpen.xml" />
-		<mapper resource="com/ktx/ddep/mapper/rcpRvs.xml" />
-		<mapper resource="com/ktx/ddep/mapper/rvReps.xml" />
-		<mapper resource="com/ktx/ddep/mapper/rcpItems.xml" />
-		<mapper resource="com/ktx/ddep/mapper/rcpSteps.xml" />
-		<mapper resource="com/ktx/ddep/mapper/rcpSauce.xml" />
-		<mapper resource="com/ktx/ddep/mapper/sellTimes.xml" />
-		<mapper resource="com/ktx/ddep/mapper/rcpsSaved.xml" />
-		<mapper resource="com/ktx/ddep/mapper/sellImgs.xml" />
-
-	</mappers>-->
+		<!-- market package -->
+		<typeAlias type="com.ktx.ddep.dto.market.Item" alias="Item"/>
+		<typeAlias type="com.ktx.ddep.dto.market.Market" alias="Market"/>
+		<typeAlias type="com.ktx.ddep.dto.market.MarketList" alias="MarketList"/>
+		<typeAlias type="com.ktx.ddep.dto.market.MarketTime" alias="MarketTime"/>
+		<typeAlias type="com.ktx.ddep.dto.market.Sell" alias="Sell"/>
+		<typeAlias type="com.ktx.ddep.dto.market.SellImg" alias="SellImg"/>
+		<typeAlias type="com.ktx.ddep.dto.market.Trade" alias="Trade"/>
+		<typeAlias type="com.ktx.ddep.dto.market.TradeRV" alias="TradeRV"/>
+		
+		<!-- recipe package -->
+		<typeAlias type="com.ktx.ddep.dto.recipe.Rcp" alias="Rcp"/>
+		<typeAlias type="com.ktx.ddep.dto.recipe.RcpItem" alias="RcpItem"/>
+		<typeAlias type="com.ktx.ddep.dto.recipe.RcpOpen" alias="RcpOpen"/>
+		<typeAlias type="com.ktx.ddep.dto.recipe.RcpRep" alias="RcpRep"/>
+		<typeAlias type="com.ktx.ddep.dto.recipe.RcpSauce" alias="RcpSauce"/>
+		<typeAlias type="com.ktx.ddep.dto.recipe.RcpStep" alias="RcpStep"/>
+		<typeAlias type="com.ktx.ddep.dto.recipe.RvRep" alias="RvRep"/>
+		<typeAlias type="com.ktx.ddep.dto.recipe.RcpRv" alias="RcpRv"/>
+		
+		<typeAlias type="com.ktx.ddep.dto.PageVO" alias="PageVO"/>
+		
+	</typeAliases>
 
 </configuration>
 

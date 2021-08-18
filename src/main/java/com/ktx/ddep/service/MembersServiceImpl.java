@@ -56,14 +56,28 @@ public class MembersServiceImpl implements MembersService {
     	
     	return list;
     }
-
     
+    
+    // email duplicationCheck
+ 	@Override
+ 	public int checkEmailDuplication(String email) {
+ 		
+ 		return membersDAO.selectCheckEmail(email);
+ 		
+ 	}
+
+	// insert member
 	@Override
-	public void editPassword() {
+	@Transactional
+	public int addMember(Member member) {
 		
-		List<Member> list = membersDAO.selectPassword();
+		// 1) insert address
 		
 		
+		
+		return membersDAO.insertJoinMember(member);
 		
 	}
+
+	
 }

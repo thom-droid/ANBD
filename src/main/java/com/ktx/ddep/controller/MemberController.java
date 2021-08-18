@@ -57,6 +57,14 @@ public class MemberController {
 		
 	}
 	
+	// sign up - email duplication check
+	@GetMapping("/signup/ajax/email_duplication_check")
+	@ResponseBody
+	public int checkEmailDuplication(String email) {
+		
+		return membersService.checkEmailDuplication(email);
+		
+	}
 	
 	// security role test
 	@GetMapping("/secured/test")

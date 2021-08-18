@@ -1,10 +1,13 @@
 package com.ktx.ddep.service;
 
+import com.ktx.ddep.dao.member.AddressDAO;
 import com.ktx.ddep.dao.member.MembersDAO;
 import com.ktx.ddep.dto.member.Member;
 import com.ktx.ddep.dto.member.MemberRole;
 import com.ktx.ddep.security.UserEntity;
 import com.ktx.ddep.security.UserRoleEntity;
+
+import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,15 +19,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@RequiredArgsConstructor
 @Service
-@Mapper
 public class MembersServiceImpl implements MembersService {
 	
-    @Autowired
-    MembersDAO membersDAO;
-    
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    private final MembersDAO membersDAO;
+    private final AddressDAO addressDAO;
 
     @Override
     public Member memberInfo(int no) {
@@ -63,13 +63,6 @@ public class MembersServiceImpl implements MembersService {
 		
 		List<Member> list = membersDAO.selectPassword();
 		
-		if (list!=null) {
-			for(Member m: list) {
-				// retrieve pw and encode
-				m.setPassword(passwordEncoder.encode(m.getPassword()));
-				membersDAO.updatePassword(m);
-			}
-		}
 		
 		
 	}

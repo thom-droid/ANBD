@@ -8,16 +8,18 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import lombok.RequiredArgsConstructor;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
     // user data will be stored in an object that implements UserDbService
 	// and those data will be used to verify authentication
-    @Autowired
-    UserDbService userdbService;
+    private final UserDbService userdbService;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

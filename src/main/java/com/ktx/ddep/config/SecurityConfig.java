@@ -13,12 +13,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.ktx.ddep.security.CustomUserDetailsService;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-    CustomUserDetailsService customUserDetailsService;
+    private final CustomUserDetailsService customUserDetailsService;
 
 	//ignore static resources
     @Override

@@ -3,6 +3,7 @@ package com.ktx.ddep.dao.member;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 import com.ktx.ddep.dto.PageVO;
 import com.ktx.ddep.dto.member.Address;
@@ -12,6 +13,7 @@ import com.ktx.ddep.dto.member.Point;
 import com.ktx.ddep.security.UserRoleEntity;
 
 @Mapper
+@Repository
 public interface MembersDAO {
 
 	

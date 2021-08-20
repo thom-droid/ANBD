@@ -1,9 +1,19 @@
 package com.ktx.ddep.controller;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ktx.ddep.dto.member.Address;
 import com.ktx.ddep.dto.member.Member;
 import com.ktx.ddep.service.MembersService;
 
@@ -23,6 +33,8 @@ public class MemberController {
 	
 	private final PasswordEncoder passwordEncoder;
 	
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
+	
 	@GetMapping(path="/")
 	public String main() {
 		return "members/index";
@@ -41,19 +53,10 @@ public class MemberController {
 	}
 	
 	// signup page
-	@GetMapping("/signup")
+	@GetMapping("/signupform")
 	public String getSignup() {
-		return "members/signup";
-	}
-	
-	// sign up 
-	@PostMapping("/signup")
-	public int signup(@RequestBody Member member) {
 		
-		//encode password
-		member.setPassword(passwordEncoder.encode(member.getPassword()));
-		
-		return membersService.addMember(member);
+		return "members/signupform";
 		
 	}
 	
@@ -66,12 +69,54 @@ public class MemberController {
 		
 	}
 	
+	// sign up - nickname duplication check
+	@GetMapping("/signup/ajax/nickname_duplication_check")
+	@ResponseBody
+	public int checkNicknameDuplication(String nickname) {
+		
+		return membersService.checkNicknameDuplication(nickname);
+	}
+	
+	// sign up 
+	@PostMapping("/signup")
+	@ResponseBody
+	public int signup(@RequestBody String json) throws JsonMappingException, JsonProcessingException {
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Map<String, Object> map = mapper.readValue(json, new TypeReference<Map<String, Object>>(){});
+		
+		if(map != null) {
+			try {
+				
+				Member member = mapper.convertValue(map.get("Member"), Member.class);
+				Address address = mapper.convertValue(map.get("Adress"), Address.class);
+
+				return membersService.addMember(member, address);
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+		}
+		
+		// encode password
+		// member.setPassword(passwordEncoder.encode(member.getPassword()));
+		// membersService.addMember(member, address);
+		return 0 ;
+		
+	}
+	
+
+	
+	
+	
+	
 	// security role test
 	@GetMapping("/secured/test")
 	public String secured() {
 		return "users/secured_page";
 	}
-	
 	
 	// for test
 	@GetMapping("/testjson/{no}")

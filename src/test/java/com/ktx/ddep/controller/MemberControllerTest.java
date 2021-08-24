@@ -69,16 +69,12 @@ public class MemberControllerTest {
 	
 	@Autowired
 	private PasswordEncoder encoder;
-	
-	// TestRestTemplate template;
 
 	private MockMvc mockMvc;
 	
-	@Before
-	public void createMockInstance() {
-		MockitoAnnotations.openMocks(this);
-		mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-	}
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
+	
+	private final String defaultUrl = "http://localhost:8090";
 	
 	@Test
 	public void testMemberInfo() throws Exception {
@@ -171,7 +167,7 @@ public class MemberControllerTest {
 		// given 
 		CloseableHttpClient client = HttpClients.createDefault();
 		
-		String requestJson = "{\"Member\":{\"email\":\"qkrwlgy@gmail.com\",\"password\":\"asdasd12!Q\",\"name\":\"박지효\",\"nickname\":\"송지효아님\",\"phoneNumber\":\"01012341234\"},\"Address\":{\"sido\":\"서울\",\"sigungu\":\"동작구\",\"dong\":\"대방동\",\"lat\":\"37.4990779348649\",\"lng\":\"126.928764031881\"}}";
+		String requestJson = "{\"Member\":{\"email\":\"qkrwlgy123@gmail.com\",\"password\":\"asdasd12!Q\",\"name\":\"박지효\",\"nickname\":\"송지효아니야아\",\"phoneNumber\":\"01012341234\"},\"Address\":{\"sido\":\"서울\",\"gugun\":\"동작구\",\"dong\":\"대방동\",\"lat\":\"37.4990779348649\",\"lng\":\"126.928764031881\"}}";
 		
 
 		HttpPost request = new HttpPost(defaultUrl+"/signup");
@@ -180,8 +176,8 @@ public class MemberControllerTest {
 		
 		StringEntity entity = new StringEntity(requestJson);
 		request.setEntity(entity);
-		request.setHeader("Accept", "application/json");
-		request.setHeader("Content-type","application/json");
+		request.setHeader("Accept", "application/json;charset=utf-8");
+		request.setHeader("Content-type","application/json;charset=utf-8");
 		
 		// when
 		// request is sent with json
@@ -206,7 +202,7 @@ public class MemberControllerTest {
 			
 			// check returned value
 			String expectedContent = EntityUtils.toString(responseEntity);
-			assertThat(expectedContent).isEqualTo(1);
+			assertThat(expectedContent).isEqualTo("1");
 		}
 		
 		client.close();
@@ -222,7 +218,7 @@ public class MemberControllerTest {
 		expectedMember.setName("박지효");
 		expectedMember.setNickname("송지효아님");
 		
-		String requestJson = "{\"Member\":{\"email\":\"qkrwlgy@gmail.com\",\"password\":\"asdasd12!Q\",\"name\":\"박지효\",\"nickname\":\"송지효아님\",\"phoneNumber\":\"01012341234\"},\"Address\":{\"sido\":\"서울\",\"sigungu\":\"동작구\",\"dong\":\"대방동\",\"lat\":\"37.4990779348649\",\"lng\":\"126.928764031881\"}}";
+		String requestJson = "{\"Member\":{\"email\":\"qkrwlgy@gmail.com\",\"password\":\"asdasd12!Q\",\"name\":\"박지효\",\"nickname\":\"송지효아님\",\"phoneNumber\":\"01012341234\"},\"Address\":{\"sido\":\"서울\",\"gugun\":\"동작구\",\"dong\":\"대방동\",\"lat\":\"37.4990779348649\",\"lng\":\"126.928764031881\"}}";
 		
 		ObjectMapper mapper = new ObjectMapper();
 		
@@ -231,6 +227,7 @@ public class MemberControllerTest {
 		Member member = mapper.convertValue(map.get("Member"), Member.class);
 		
 		// assert if values from both objects are the same
+		
 		assertThat(member.getEmail()).isEqualTo(expectedMember.getEmail());
 		assertThat(member.getName()).isEqualTo(expectedMember.getName());
 		assertThat(member.getNickname()).isEqualTo(expectedMember.getNickname());

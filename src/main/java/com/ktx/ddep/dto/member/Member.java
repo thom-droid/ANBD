@@ -15,8 +15,8 @@ public class Member {
 			/* 210126 양 주간 랭킹 합산포인트 */sumPoint;
 
 	private String email, password, name, nickname, phoneNumber, profileImg,sido, gugun, dong;
-	private char gender, marketkeeperStep, warning, tutorial, grade, rcpWarning;
-	private Date birthDate, startDay;
+	private char marketkeeperStep, warning, tutorial, grade, rcpWarning;
+	private Date startDay;
 	private Timestamp regdate;
 	private Double lat, lng;
 	private int nowYear;
@@ -61,10 +61,6 @@ public class Member {
 	public void setMarketkeeperStep(char marketkeeperStep) {
 		this.marketkeeperStep = marketkeeperStep;
 	}
-
-
-
-	
 
 	public int getNo() {
 		return no;
@@ -162,14 +158,6 @@ public class Member {
 		this.profileImg = profileImg;
 	}
 
-	public char getGender() {
-		return gender;
-	}
-
-	public void setGender(char gender) {
-		this.gender = gender;
-	}
-
 	public char getMarketkepperStep() {
 		return marketkeeperStep;
 	}
@@ -192,15 +180,6 @@ public class Member {
 
 	public void setTutorial(char tutorial) {
 		this.tutorial = tutorial;
-	}
-
-	public Date getBirthDate() {
-		return birthDate;
-	}
-
-	public void setBirthDate(Date birthDate) {
-		calendar.setTime(birthDate);
-		this.birthDate = birthDate;
 	}
 
 	public Date getStartDay() {
@@ -352,16 +331,13 @@ public class Member {
 	
 	// constructor for sign up
 	@Builder
-	public Member(int addressNo, String email, String password, String name, String nickname, String phoneNumber,
-			char gender, Date birthDate) {
+	public Member(int addressNo, String email, String password, String name, String nickname, String phoneNumber) {
 		this.addressNo = addressNo;
 		this.email = email;
 		this.password = password;
 		this.name = name;
 		this.nickname = nickname;
 		this.phoneNumber = phoneNumber;
-		this.gender = gender;
-		this.birthDate = birthDate;
 	}
 	
 }

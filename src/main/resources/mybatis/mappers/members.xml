@@ -7,7 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectLogin" parameterType="Member"
 		resultType="Member">
 		SELECT no, email, password, name, nickname, phone_number phoneNumber,
-		gender, birth_date birthDate, profile_img profileImg, regdate,
+		profile_img profileImg, regdate,
 		marketkeeper_step marketkeeperStep, curr_points currPoints,
 		accu_points accuPoints, address_no addressNo, warning, start_day
 		startDay, login_count loginCount, tutorial, grade, rcp_warning
@@ -28,7 +28,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		accuPoints, grade, addressNo, warning, startDay, loginCount, tutorial,
 		rcpWarning, rownum r
 		FROM (SELECT no, email, password, name, nickname, phone_number
-		phoneNumber, gender, birth_date birthDate, profile_img profileImg,
+		phoneNumber, profile_img profileImg,
 		regdate, marketkeeper_step marketkeeperStep, curr_points currPoints,
 		accu_points accuPoints, grade, address_no addressNo, warning,
 		start_day startDay, login_count loginCount, tutorial, rcp_warning
@@ -49,7 +49,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectWeeklyRankList" parameterType="point"
 		resultType="Member">
 		SELECT no, email, password, name, nickname, phone_number phoneNumber,
-		gender, birth_date birthDate, profile_img profileImg, regdate,
+		profile_img profileImg, regdate,
 		marketkeeper_step marketkeeperStep,curr_points currPoints,accu_points
 		accuPoints, grade,address_no addressNo, warning,start_day
 		startDay,login_count loginCount, tutorial, sumPoint, rcp_warning
@@ -84,7 +84,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		accuPoints, grade, addressNo, warning, startDay, loginCount, tutorial,
 		rcpWarning, rownum r
 		FROM (SELECT no, email, password, name, nickname, phone_number
-		phoneNumber, gender, birth_date birthDate, profile_img profileImg,
+		phoneNumber, profile_img profileImg,
 		regdate, marketkeeper_step marketkeeperStep, curr_points currPoints,
 		accu_points accuPoints, grade, address_no addressNo, warning,
 		start_day startDay, login_count loginCount, tutorial, rcp_warning
@@ -103,7 +103,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		addressNo, warning,startDay, loginCount, tutorial, sumPoint,
 		rcpWarning, rankNum
 		FROM(SELECT no, email, password, name, nickname, phone_number phoneNumber,
-		gender, birth_date birthDate, profile_img profileImg, regdate,
+		profile_img profileImg, regdate,
 		marketkeeper_step marketkeeperStep,curr_points currPoints,accu_points
 		accuPoints, grade,address_no addressNo, warning,start_day
 		startDay,login_count loginCount, tutorial, sumPoint, rcp_warning
@@ -145,11 +145,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</selectKey>
 		<!-- 2021-01-25 이소현 (grade 컬럼명, 기본값 변경) -->
 		INSERT INTO MEMBERS(no, email, password, name, nickname, phone_number,
-		gender, birth_date, profile_img, regdate, marketkeeper_step,
+		profile_img, regdate, marketkeeper_step,
 		curr_points, accu_points, address_no, grade)
 		VALUES(#{no}, #{email},
-		#{password}, #{name}, #{nickname}, #{phoneNumber}, #{gender},
-		#{birthDate}, 'profile.jpg', systimestamp, 'n', 0, 0, #{addressNo},
+		#{password}, #{name}, #{nickname}, #{phoneNumber}, 
+		'profile.jpg', systimestamp, 'n', 0, 0, #{addressNo},
 		'f')
 	</insert>
 
@@ -188,7 +188,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- login data for security -->
 	<select id="selectById" parameterType="String" resultType="Member">
 		SELECT no, email, password, name, nickname, phone_number phoneNumber,
-			gender, birth_date birthDate, profile_img profileImg, regdate,
+			profile_img profileImg, regdate,
 			marketkeeper_step marketkeeperStep, curr_points currPoints,
 			accu_points accuPoints, address_no addressNo, rcp_warning rcpWarning, start_day startDay, 
             login_count loginCount, tutorial

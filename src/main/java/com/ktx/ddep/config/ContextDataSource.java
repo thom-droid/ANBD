@@ -18,7 +18,7 @@ public class ContextDataSource implements TransactionManagementConfigurer {
     private String driverClassName = "oracle.jdbc.OracleDriver";
     private String url = "jdbc:oracle:thin:@localhost:1521:xe";
     private String username = "DDEP";
-    private String password = "1111";
+    private String password = "2222";
 
     // connection pool config
     @Bean

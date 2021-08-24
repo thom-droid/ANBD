@@ -41,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable() // currently disabled for application run
                 .authorizeRequests() // authorization per url
-                .antMatchers("/", "/login","/loginerror", "/signup", "/join","/update/pw").permitAll() // anyone allowed
+                .antMatchers("/", "/login","/loginerror", "/signupform","/signup/**", "/join","/update/pw").permitAll() // anyone allowed
                 .antMatchers("/secured/test", "/members/**").hasRole("USER") // only user allowed   
                 .antMatchers("/market").hasRole("MARKETKEEPER") // only marketkeeper allowed
                 .anyRequest().authenticated() // anyone else need to be authenticated

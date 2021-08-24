@@ -53,7 +53,7 @@ public class MemberController {
 	}
 	
 	// signup page
-	@GetMapping("/signupform")
+	@GetMapping("/signup")
 	public String getSignup() {
 		
 		return "members/signupform";
@@ -84,14 +84,19 @@ public class MemberController {
 		
 		ObjectMapper mapper = new ObjectMapper();
 		
+		// deserialize from json to java object which is Map
 		Map<String, Object> map = mapper.readValue(json, new TypeReference<Map<String, Object>>(){});
+		
+		log.debug("{}", map);
 		
 		if(map != null) {
 			try {
-				
+				// convert from map to required objs
 				Member member = mapper.convertValue(map.get("Member"), Member.class);
-				Address address = mapper.convertValue(map.get("Adress"), Address.class);
-
+				Address address = mapper.convertValue(map.get("Address"), Address.class);
+				
+				log.debug("{}, {} is converted", member, address);
+				
 				return membersService.addMember(member, address);
 				
 			} catch (Exception e) {

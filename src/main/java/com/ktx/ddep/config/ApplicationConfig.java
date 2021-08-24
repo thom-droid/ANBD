@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-
 // bean register for controller
 @Configuration
 @Import({ContextDataSource.class, ContextSqlMapper.class, SecurityConfig.class})
@@ -14,5 +13,4 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @ComponentScan(basePackages = { "com.ktx.ddep.service", "com.ktx.ddep.dao", "com.ktx.ddep.security"})
 public class ApplicationConfig  {
 	
-
 }

@@ -1,6 +1,9 @@
 package com.ktx.ddep.controller;
 
+import java.security.Principal;
 import java.util.Map;
+
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ktx.ddep.dto.member.Address;
 import com.ktx.ddep.dto.member.Member;
@@ -36,7 +38,11 @@ public class MemberController {
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	
 	@GetMapping(path="/")
-	public String main() {
+	public String main(Principal principal, HttpSession session) {
+		if(principal != null) {
+			String userId = principal.getName();
+			session.setAttribute("loggedInUser", membersService.getMemberById(userId));
+		}
 		return "members/index";
 	}
 	
@@ -80,7 +86,7 @@ public class MemberController {
 	// sign up 
 	@PostMapping("/signup")
 	@ResponseBody
-	public int signup(@RequestBody String json) throws JsonMappingException, JsonProcessingException {
+	public int signup(@RequestBody String json, HttpSession session) throws JsonMappingException, JsonProcessingException {
 		
 		ObjectMapper mapper = new ObjectMapper();
 		
@@ -100,15 +106,19 @@ public class MemberController {
 				// encode password
 				member.setPassword(passwordEncoder.encode(member.getPassword()));
 				
-				return membersService.addMember(member, address);
+				int addMemberResult = membersService.addMember(member, address);
+				
+				if(addMemberResult ==1) {
+					session.setAttribute("loggedInUser", membersService.getMemberById(member.getEmail()));
+					return addMemberResult;
+				}
 				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			
 		}
-		
-		return 0 ;
+		return 0;
 		
 	}
 	

@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>로그인페이지</title>
+    <title>login</title>
     <link rel="stylesheet" href="resources/static/css/login.css" />
     <%@ include file="/WEB-INF/template/link.jsp" %>
         
@@ -15,7 +15,6 @@
         <img src="resources/static/img/anbd_resources/logo.png"/>
     </div>
     <form action="/authenticate" method="post">
-    	<!-- msg가 있으면 출력 -->
         <p id="resultLogin"></p>
         <p id="loginId">
             <input type="text" id="id" name="email" placeholder="ktganzi@gmail.com"/><br/>
@@ -33,14 +32,13 @@
             <a href="passwordSearch.html">비밀번호 찾기</a>
         </p>
         
-        
         <p class="btn"  >
             <button id="logIn" type="submit" class="btn btn-info" >로그인</button>
         </p>
-        <p class="btn" >
-            <button id="register" type="submit" class="btn btn-info" >회원가입</button>
-        </p>
     </form>
+    	<p class="btn" >
+        	<a href="/signup"><button id="register" class="btn btn-info" >회원가입</button></a>
+        </p>
 </div>
 <script src="resources/static/js/jquery.js"></script>
 <script src="resources/static/js/login.js"></script> 

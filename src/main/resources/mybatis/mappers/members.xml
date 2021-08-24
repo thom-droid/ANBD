@@ -194,7 +194,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             login_count loginCount, tutorial
 		FROM members
 		WHERE email= #{email}
-
 	</select>
 	
 	<select id="selectRoleById" parameterType="String" resultType="MemberRole">

@@ -13,5 +13,7 @@ public interface MembersService extends UserDbService{
 	public int checkEmailDuplication(String email);
 
 	public int checkNicknameDuplication(String nickname);
+
+	public Member getMemberById(String email);
     
 }

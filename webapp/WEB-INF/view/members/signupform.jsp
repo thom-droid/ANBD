@@ -4,13 +4,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>회원가입</title>
+    <title>ANBD 회원가입</title>
    <%@ include file="/WEB-INF/template/link.jsp" %>
    <link rel="stylesheet" href="resources/static/css/signup.css"/>
 </head>
 <body>
 <div id="joinFormWrap">
-    <h1><a href=""><img id="joinFormLogoImg" src="resources/static/img/anbd_resources/logo.png"></a></h1>
+    <h1><a href="/"><img id="joinFormLogoImg" src="resources/static/img/anbd_resources/logo.png"></a></h1>
 
     <form>
         <fieldset>

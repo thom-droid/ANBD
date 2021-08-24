@@ -95,6 +95,12 @@ public class MembersServiceImpl implements MembersService {
 				.build());
 	}
 
+	// member info after sign up
+	@Override
+	public Member getMemberById(String email) {
+		return membersDAO.selectById(email);
+	}
+
 	
 	
 }

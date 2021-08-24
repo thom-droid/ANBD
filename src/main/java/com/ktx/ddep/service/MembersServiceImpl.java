@@ -1,6 +1,7 @@
 package com.ktx.ddep.service;
 
 import com.ktx.ddep.dao.member.AddressDAO;
+import com.ktx.ddep.dao.member.MemberRoleDAO;
 import com.ktx.ddep.dao.member.MembersDAO;
 import com.ktx.ddep.dto.member.Address;
 import com.ktx.ddep.dto.member.Member;
@@ -29,6 +30,7 @@ public class MembersServiceImpl implements MembersService {
 	
     private final MembersDAO membersDAO;
     private final AddressDAO addressDAO;
+    private final MemberRoleDAO memberRoleDAO;
 
     @Override
     public Member memberInfo(int no) {
@@ -82,15 +84,15 @@ public class MembersServiceImpl implements MembersService {
 		log.debug("{} insert address result", addressResult);
 		
 		// 2) when insertAddress() succeeds, call insertJoinMember()
-		if(addressResult == 1) {
-			member.setAddressNo(address.getNo());
-			
-			log.debug("address No : {}", address.getNo());
-			
-			return membersDAO.insertJoinMember(member);
-		}
+		member.setAddressNo(address.getNo());
+		log.debug("address No : {}", address.getNo());
+		membersDAO.insertJoinMember(member);
 		
-		return 0;
+		// 3) with member's number recently added, call insertMemberRole()
+		return memberRoleDAO.insertMemberRole(MemberRole.builder()
+				.memberNo(member.getNo())
+				.roleName("ROLE_USER")
+				.build());
 	}
 
 	

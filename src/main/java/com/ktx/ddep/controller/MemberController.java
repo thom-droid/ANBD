@@ -97,6 +97,9 @@ public class MemberController {
 				
 				log.debug("{}, {} is converted", member, address);
 				
+				// encode password
+				member.setPassword(passwordEncoder.encode(member.getPassword()));
+				
 				return membersService.addMember(member, address);
 				
 			} catch (Exception e) {
@@ -105,9 +108,6 @@ public class MemberController {
 			
 		}
 		
-		// encode password
-		// member.setPassword(passwordEncoder.encode(member.getPassword()));
-		// membersService.addMember(member, address);
 		return 0 ;
 		
 	}

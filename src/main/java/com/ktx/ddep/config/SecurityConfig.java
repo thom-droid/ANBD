@@ -42,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable() // currently disabled for application run
                 .authorizeRequests() // authorization per url
                 .antMatchers("/", "/login","/loginerror", "/signup/**", "/join").permitAll() // anyone allowed
-                .antMatchers("/secured/test", "/members/**").hasRole("USER") // only user allowed   
+                .antMatchers("/secured/test", "/members/**", "/mypage/**").hasRole("USER") // only user allowed   
                 .antMatchers("/market").hasRole("MARKETKEEPER") // only marketkeeper allowed
                 .anyRequest().authenticated() // anyone else need to be authenticated
                 .and() // login and logout configuration

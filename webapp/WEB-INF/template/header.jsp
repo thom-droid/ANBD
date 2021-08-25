@@ -27,6 +27,9 @@
         <span class="logo"><a href="/"><img src="resources/static/img/anbd_resources/logo.png"/></a></span>
         
         <div class="right user_menu hidden">
+        <c:if test="${sessionScope.loggedInUser ne null }" >
+        	<div class="user_profile">${sessionScope.loggedInUser.name} 님</div>
+        </c:if>
             <div class="user_menu_item"><a href="/mypage">마이페이지</a></div>
             <div class="user_menu_item"><a href="/logout">로그아웃</a></div>
         </div>

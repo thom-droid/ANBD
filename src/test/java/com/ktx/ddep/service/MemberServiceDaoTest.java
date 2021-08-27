@@ -1,6 +1,8 @@
-package com.ktx.ddep.dao;
+package com.ktx.ddep.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.hamcrest.CoreMatchers.any;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doReturn;
@@ -8,6 +10,11 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import static org.mockito.ArgumentMatchers.anyInt;
 
 import org.junit.Before;
@@ -17,19 +24,19 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ktx.ddep.config.DaoTestConfig;
+import com.ktx.ddep.config.test.DaoTestConfig;
 import com.ktx.ddep.controller.MemberController;
+import com.ktx.ddep.dao.market.MarketsDAO;
 import com.ktx.ddep.dao.member.AddressDAO;
 import com.ktx.ddep.dao.member.MemberRoleDAO;
 import com.ktx.ddep.dao.member.MembersDAO;
 import com.ktx.ddep.dto.member.Address;
 import com.ktx.ddep.dto.member.Member;
 import com.ktx.ddep.dto.member.MemberRole;
+import com.ktx.ddep.dto.member.SessionUser;
 import com.ktx.ddep.service.MembersService;
 import com.ktx.ddep.service.MembersServiceImpl;
 
@@ -42,7 +49,7 @@ import com.ktx.ddep.service.MembersServiceImpl;
 @RunWith(MockitoJUnitRunner.class)
 @ContextConfiguration(classes = DaoTestConfig.class)
 @Transactional
-public class DaoTest {
+public class MemberServiceDaoTest {
 
 	@InjectMocks
 	private MemberController controller;
@@ -58,6 +65,9 @@ public class DaoTest {
 	
 	@Mock
 	MemberRoleDAO memberRoleDao;
+	
+	@Mock
+	MarketsDAO marketsDao;
 	
 	@Before
 	public void instantiateMock() {
@@ -114,6 +124,25 @@ public class DaoTest {
 		
 	}
 	
+	@Test
+	public void testServiceMypage() {
+		SessionUser user = mock(SessionUser.class);
+		Member member = mock(Member.class);
+		HashMap<String, Object> anyMap = mock(HashMap.class);
+		
+		when(service.getMypageInfoByMember(user)).thenReturn(anyMap);
+		membersDao.selectOne(user.getNo());
+		marketsDao.selectOne(user.getNo());
+		when(membersDao.selectTotalRankerOne(anyInt())).thenReturn(member);
+		
+		assertThat(membersDao.selectTotalRankerOne(0)).isEqualTo(member);
+		assertThat(service.getMypageInfoByMember(user)).isEqualTo(anyMap);
+		
+		verify(service).getMypageInfoByMember(user);
+		verify(membersDao).selectOne(anyInt());
+		verify(marketsDao).selectOne(user.getNo());
+		
+	}
 	
 	
 }

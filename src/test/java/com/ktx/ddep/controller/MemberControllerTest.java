@@ -60,10 +60,16 @@ import com.ktx.ddep.dto.member.Address;
 import com.ktx.ddep.dto.member.Member;
 import com.ktx.ddep.service.MembersService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {ApplicationConfig.class})
 public class MemberControllerTest {
 
+	@Autowired
+	private MemberController controller;
+	
 	@Autowired
 	private MembersService service;
 	
@@ -72,10 +78,12 @@ public class MemberControllerTest {
 
 	private MockMvc mockMvc;
 	
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
-	
 	private final String defaultUrl = "http://localhost:8090";
 	
+	@Before
+	public void instantiateMockMvc() {
+		mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+	}
 	@Test
 	public void testMemberInfo() throws Exception {
 
@@ -86,9 +94,6 @@ public class MemberControllerTest {
 		testDto.setName("bang");
 		testDto.setNickname("고추잡채");
 		testDto.setNo(no);
-		
-		//when
-		doReturn(testDto).when(service).memberInfo(no);
 		
 		
 		//then

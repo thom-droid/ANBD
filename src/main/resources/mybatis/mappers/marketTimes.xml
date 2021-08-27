@@ -2,7 +2,7 @@
 <!DOCTYPE mapper 
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="marketTimes">
+<mapper namespace="com.ktx.ddep.dao.market.MarketTimesDAO">
 
  
 <!--210128 양 memberNo로 주소 정보 얻어오기   --><!-- 경택씨에게 받은 mapper 사용 주석처리
@@ -14,10 +14,10 @@ ORDER BY time
 </select>
  -->
 <!--210128 양 경택씨한테서 받음, 이전 매퍼 주석처리  -->
-<select id="time" parameterType="int" resultType="MarketTime">
+<select id="selectTime" parameterType="int" resultType="MarketTime">
 		SELECT no,time
 		FROM market_times
-		WHERE member_no = #{no}
+		WHERE member_no = #{memberNo}
 </select>
 
 

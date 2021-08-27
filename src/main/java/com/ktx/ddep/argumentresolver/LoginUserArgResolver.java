@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 @Component
 public class LoginUserArgResolver implements HandlerMethodArgumentResolver{
 	
-	private final HttpSession session;
+	private final HttpSession session; 
 	
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {

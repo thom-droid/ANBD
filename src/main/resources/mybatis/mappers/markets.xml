@@ -2,14 +2,14 @@
 <!DOCTYPE mapper 
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="markets">
+<mapper namespace="com.ktx.ddep.dao.market.MarketsDAO">
 
 	<!--210127 양 memberNo로 마켓 정보 얻어오기 (서비스지수 얻기) -->
 	<select id="selectOne" resultType="Market">
 		SELECT member_no memberNo, name, img, service_idx
 		serviceIdx,regdate,address_no addressNo
 		FROM markets
-		WHERE member_no = #{mamberNo}
+		WHERE member_no = #{memberNo}
 	</select>
 
 	<!-- 02.01_ 오경택 장터의 기본정보 -->

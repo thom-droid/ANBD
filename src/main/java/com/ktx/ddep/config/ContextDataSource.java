@@ -2,6 +2,7 @@ package com.ktx.ddep.config;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionManager;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.TransactionManagementConfigure
 import javax.sql.DataSource;
 
 // dataSource config
+@Configuration
 @EnableTransactionManagement
 public class ContextDataSource implements TransactionManagementConfigurer {
 

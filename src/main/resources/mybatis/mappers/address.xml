@@ -9,7 +9,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT no, sido, gugun, dong, detail_address detailAddress, lat, lng,
 		regdate
 		FROM address
-		WHERE no=#{no}
+		WHERE no=#{memberAddrNo}
 
 	</select>
 

@@ -75,24 +75,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<!--210127 양 no로 전체랭킹 정보 가져오기 -->
 	<select id="selectTotalRankerOne" resultType="Member">
-		SELECT no, email, password, name, nickname, phoneNumber, gender, birthDate,
+		SELECT no, email, password, name, nickname, phoneNumber, 
 		profileImg, regdate, marketkeeperStep, currPoints, accuPoints, grade,
-		addressNo, warning, startDay, loginCount, tutorial, rcpWarning, r
+		addressNo, startDay, loginCount, tutorial, rcpWarning, r
 		rankNum
-		FROM (SELECT no, email, password, name, nickname, phoneNumber, gender,
-		birthDate, profileImg, regdate, marketkeeperStep, currPoints,
-		accuPoints, grade, addressNo, warning, startDay, loginCount, tutorial,
+		FROM (SELECT no, email, password, name, nickname, phoneNumber, 
+		profileImg, regdate, marketkeeperStep, currPoints,
+		accuPoints, grade, addressNo, startDay, loginCount, tutorial,
 		rcpWarning, rownum r
 		FROM (SELECT no, email, password, name, nickname, phone_number
 		phoneNumber, profile_img profileImg,
 		regdate, marketkeeper_step marketkeeperStep, curr_points currPoints,
-		accu_points accuPoints, grade, address_no addressNo, warning,
+		accu_points accuPoints, grade, address_no addressNo,
 		start_day startDay, login_count loginCount, tutorial, rcp_warning
 		rcpWarning
 		FROM members
 		ORDER BY accuPoints DESC, regdate ASC)
 		)
-		WHERE no=#{no}
+		WHERE no=#{memberNo}
 	</select>
 
 	<!--210127 양 no로 주간 랭킹 순위 가져오기, 이럴꺼면 걍 이걸로 가져오는게? -->

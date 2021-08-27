@@ -15,6 +15,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ktx.ddep.dao.member.MembersDAO;
 import com.ktx.ddep.dto.member.Address;
 import com.ktx.ddep.dto.member.Member;
 import com.ktx.ddep.dto.member.SessionUser;
@@ -53,6 +54,7 @@ public class MemberController {
 															.nickname(memberInfo.getNickname())
 															.profileImg(memberInfo.getProfileImg())
 															.email(memberInfo.getEmail())
+															.marketkeeperStep(memberInfo.getMarketkeeperStep())
 															.build());
 			
 			log.info("user {} is logged", userId);
@@ -129,6 +131,7 @@ public class MemberController {
 															.nickname(memberInfo.getNickname())
 															.profileImg(memberInfo.getProfileImg())
 															.email(memberInfo.getEmail())
+															.marketkeeperStep(memberInfo.getMarketkeeperStep())
 															.build());
 					return addMemberResult;
 				}
@@ -144,10 +147,12 @@ public class MemberController {
 	@GetMapping("/mypage")
 	public String mypage(ModelMap map, @LoginUser SessionUser user) {
 		
-		
+		map.addAllAttributes(membersService.getMypageInfoByMember(user));
 		
 		return "members/mypage";
 	}
+	
+	
 	
 	
 	

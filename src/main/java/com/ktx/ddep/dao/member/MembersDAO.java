@@ -36,7 +36,7 @@ public interface MembersDAO {
 		public Member selectWeeklyRankOne(Point point);
 
 		// 210127 양 no로 전체 랭킹 정보 얻어오기
-		public Member selectTotalRankerOne(int no);
+		public Member selectTotalRankerOne(int memberNo);
 
 		// 2021-01-23 이소현
 		public int selectCheckEmail(String email);// selectCheckEmail() end

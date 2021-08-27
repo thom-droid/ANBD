@@ -19,13 +19,13 @@ import com.ktx.ddep.interceptor.HandlerMappingInterceptor;
 
 import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = {"com.ktx.ddep.controller", "com.ktx.ddep.argumentresolver"})
 public class MvcConfig implements WebMvcConfigurer {
 
-	@Autowired
-	private LoginUserArgResolver loginUserArgResolver;
+	private final LoginUserArgResolver loginUserArgResolver;
 	
 	// enable default servlet when requests other than that made for spring is made
 	@Override

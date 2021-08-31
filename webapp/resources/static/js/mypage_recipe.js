@@ -8,10 +8,27 @@ const mypageRecipe = {
 		const _this = this;
 		_.templateSettings = {interpolate: /\<\@\=(.+?)\@\>/gim,evaluate: /\<\@([\s\S]+?)\@\>/gim,escape: /\<\@\-(.+?)\@\>/gim};
 		
-		_this.myRcps();
+		_this.getMyRcps();
+		
+		// tmp recipes
+		$(".tmp_recipe").on('click', function(){
+			_this.getTmpRcps();
+		});
+		
+		// delete tmp recipes
+		$(".mypage_tmp_recipe_tab.tab_wrap ul").on('click', '.delete_btn', function(){
+			
+			const $this = $(this);
+			const param = $this.closest("div.box").find(".tmp_rcp_no").val();
+			
+			console.log(param);
+			
+			_this.deleteTmpRecipe(param);
+		}) ;
+		
 	},
 	
-	myRcps : function(){
+	getMyRcps : function(){
 		
 		const myRcpsTmpl = _.template($("#myRcpsTmpl").html());
 		const $myRcpsUl = $(".mypage_myrecipe_tab.tab_wrap ul");
@@ -26,61 +43,49 @@ const mypageRecipe = {
 				$myRcpsUl.html(myRcpsTmpl({jsons:json}));
 			}
 			
-		})
-	}
-}
-	 
+		});
+	},
 	
-	/* ================================ 임.저.레 ajax ========================== */
-	
-	const tmpRcps = _.template($("#tmpRcpsTmpl").html());
-	const $tmpRcpsUl = $(".mypage_tmp_recipe_tab.tab_wrap ul"); 
-	
-	function getTmpRcpsAjax(){
+	getTmpRcps : function(){
+		
+		const tmpRcps = _.template($("#tmpRcpsTmpl").html());
+		const $tmpRcpsUl = $(".mypage_tmp_recipe_tab.tab_wrap ul");
 		
 		$.ajax({
-			url: "/ajax/mypageTmpRcps.ktx",	
+			url: "/mypage/ajax/tmp_recipes",	
 			type: "GET",
 			dataType: "json",
 			error: function(){alert("서버점검중. 나중에 시도해주세요")},
 			success: function(json){
-				//console.log(json);
+				console.log(json);
 				$tmpRcpsUl.html(tmpRcps({tmpRcps:json}));
 			}
-		}); // ajax
-		
-	} // getTmpRcpsAjax
-	getTmpRcpsAjax();
+		}); 
+	},
 	
-	/* ================================ 임.저.레 삭제 =============================== */
-		
-	$tmpRcpsUl.on("click", ".delete_btn", function(){
+	deleteTmpRecipe: function(param){
 		
 		const c = confirm("저장된 레시피를 삭제하시겠습니까?");
 		
 		if(c==true){
 			
-			const $this = $(this);
-			const param = $this.closest("div.box").find(".tmp_rcp_no").val();
-			console.log(param);
-			//console.log(param); // "tmpRcpNo"
-			
 			$.ajax({
-				url: "/ajax/deleteTmpRcps.ktx",
-				type: "GET",
+				url: "/mypage/ajax/delete_tmp_rcp/"+ param,
+				type: "DELETE",
 				dataType: "json",
-				data: {tmpRcpNo: param},
-				error: function(){alert('아니다')},
-				success: function(response){
-					alert(response.msg);
+				error: function(){alert('something went wrong')},
+				success: function(json){
+					alert(json);
 					
-					//성공 하고 나면 새로고침 해줘야 됨
-					getTmpRcpsAjax();
+					// call after having deleted recipe
+					mypageRecipe.getTmpRcps();
 				}
 				
-			}); // ajax
+			});
 		}
-	}); // click delete_btn
+	}
+	
+}
 	
 	/* ================================ 열람 레시피 =============================== */
 	

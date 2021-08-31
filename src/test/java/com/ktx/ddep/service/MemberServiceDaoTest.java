@@ -11,8 +11,11 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -33,10 +36,12 @@ import com.ktx.ddep.dao.market.MarketsDAO;
 import com.ktx.ddep.dao.member.AddressDAO;
 import com.ktx.ddep.dao.member.MemberRoleDAO;
 import com.ktx.ddep.dao.member.MembersDAO;
+import com.ktx.ddep.dao.recipe.RcpsDAO;
 import com.ktx.ddep.dto.member.Address;
 import com.ktx.ddep.dto.member.Member;
 import com.ktx.ddep.dto.member.MemberRole;
 import com.ktx.ddep.dto.member.SessionUser;
+import com.ktx.ddep.dto.recipe.Rcp;
 import com.ktx.ddep.service.MembersService;
 import com.ktx.ddep.service.MembersServiceImpl;
 
@@ -68,6 +73,9 @@ public class MemberServiceDaoTest {
 	
 	@Mock
 	MarketsDAO marketsDao;
+	
+	@Mock
+	RcpsDAO rcpsDao;
 	
 	@Before
 	public void instantiateMock() {
@@ -141,6 +149,77 @@ public class MemberServiceDaoTest {
 		verify(service).getMypageInfoByMember(user);
 		verify(membersDao).selectOne(anyInt());
 		verify(marketsDao).selectOne(user.getNo());
+		
+	}
+	
+	@Test
+	public void testMyRecipes() {
+		
+		LinkedList<Rcp> list = new LinkedList<Rcp>();
+		Rcp item1 = Rcp.builder()
+				.img("img")
+				.itemCount(1)
+				.memberNo(8)
+				.nickname("짜릿한슬라임")
+				.no(2)
+				.price(5600)
+				.profileImg("profile.jpg")
+				.rcpsAvg(100)
+				.regdate(new Timestamp(2020))
+				.ribbonItem("cheap")
+				.scrapCount(10)
+				.status('c')
+				.title("김치찌개")
+				.viewCount(1)
+				.build();
+		
+		list.add(item1);
+		
+		when(rcpsDao.selectMyRcps(anyInt())).thenReturn(list);
+		
+		assertThat(rcpsDao.selectMyRcps(anyInt()).get(0)).isEqualTo(item1);
+		
+		
+	}
+	
+	@Test
+	public void tesGetTmpRecipes() {
+		
+		LinkedList<Rcp> list = new LinkedList<Rcp>();
+		Rcp item1 = Rcp.builder()
+				.img("img")
+				.itemCount(1)
+				.memberNo(8)
+				.nickname("짜릿한슬라임")
+				.no(2)
+				.price(5600)
+				.profileImg("profile.jpg")
+				.rcpsAvg(100)
+				.regdate(new Timestamp(2020))
+				.ribbonItem("cheap")
+				.scrapCount(10)
+				.status('w')
+				.title("김치찌개")
+				.viewCount(1)
+				.build();
+		
+		list.add(item1);
+		
+		when(rcpsDao.selectTmpRcps(anyInt())).thenReturn(list);
+		
+		assertThat(rcpsDao.selectTmpRcps(anyInt()).get(0)).isEqualTo(item1);
+		
+		verify(rcpsDao).selectTmpRcps(anyInt());
+	}
+	
+	@Test
+	public void testDeleteTmpRecipe() {
+		
+		when(rcpsDao.deleteTmpRcps(anyInt())).thenReturn(1);
+		
+		rcpsDao.deleteTmpRcps(1);
+		
+		verify(rcpsDao).deleteTmpRcps(anyInt());
 		
 	}
 	

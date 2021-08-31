@@ -578,7 +578,7 @@
                     <div class="box">
 						<input type="hidden" class="opened_rcp_no" name="openedRcpNo" value="<@=openedRcp.rcpNo@>"
                         <a href="/recipeDetailPage?no=<@=openedRcp.rcpNo@>">
-                            <img src="/img/recipeImg/<@=openedRcp.rcpImg@>" width="230" height="180"/>
+                            <img src="resources/static/img/recipes/recipes/<@=openedRcp.rcpImg@>" width="230" height="180"/>
                             <div class="title_rate">
                                 <div class="title_area">
                                     <p class="subtitle">12900p로 만드는</p>
@@ -593,7 +593,7 @@
                             <a href="">
                                 <div class="profile">
                                     <div class="profile_area">
-                                        <img src="/img/<@=openedRcp.writerProfileImg@>" class="profile_img">
+                                        <img src="resources/static/img/members/profile/<@=openedRcp.writerProfileImg@>" class="profile_img">
                                         <span class="profile_name"><@=openedRcp.writerNickname@></span>
                                     </div><!-- profile_area end -->
                                     <div class="recipe_area">
@@ -620,13 +620,13 @@
             <div class="review_popup_header">
                 <div class="recipe_info">
                     <a href="">
-                        <img src="/img/recipeImg/<@=openedRcp.rcpImg@>" width="90" height="70"/>
+                        <img src="resources/static/img/recipes/recipes/<@=openedRcp.rcpImg@>" width="90" height="70"/>
                         <div class="recipe_info_text">
                             <p>5,900원으로 만드는</p>
                             <p><span><@=openedRcp.rcpTitle@></span></p>
                             <div class="review_profile_area">
                                 <a href="">
-                                    <img class="profile_img" src="/img/profileImg/<@=openedRcp.writerProfileImg@>" /> <span><@=openedRcp.writerNickname@></span>
+                                    <img class="profile_img" src="resources/static/img/members/profile/<@=openedRcp.writerProfileImg@>" /> <span><@=openedRcp.writerNickname@></span>
                                 </a>
                             </div><!--review_profile_area-->
                         </div> <!--recipe_info_text-->
@@ -636,14 +636,14 @@
                     <div class="like_area">
 						<input id="rvRateLike" type="radio" name="rate" value='l' />
 						<label for="rvRateLike" class="rv_rate_label">
-                        	<img src="/img/golden_egg.png" width="65" height="55" />
+                        	<img src="resources/static/img/anbd_resources/golden_egg.png" width="65" height="55" />
                         	<p>좋아요</p>
 						</label>
                     </div>
                     <div class="dislike_area">
 						<input id="rvRateDislike" type="radio" name="rate" value='d' />
 						<label for="rvRateDislike" class="rv_rate_label">
-                        	<img src="/img/broken_egg.png" width="65" height="55" />
+                        	<img src="resources/static/img/anbd_resources/broken_egg.png" width="65" height="55" />
                         	<p>싫어요</p>
 						</label>
                     </div>
@@ -678,7 +678,7 @@
                     <div class="box">
 						<input type="hidden" class="saved_rcp_no" name="savedRcpNo" value="<@=savedRcp.no@>"/>
                         <a href="recipeDetail?no=<@=savedRcp.no@>">
-                            <img src="img/<@=savedRcp.img@>" />
+                            <img src="resources/static/img/recipes/recipes/img/<@=savedRcp.img@>" />
                             <div class="title_rate">
                                 <div class="title_area">
                                     <p class="subtitle">12900원으로 만드는</p>
@@ -693,7 +693,7 @@
                             <a href="">
                                 <div class="profile">
                                     <div class="profile_area">
-                                        <img src="img/<@=savedRcp.profileImg@>" class="profile_img">
+                                        <img src="resources/static/img/members/profile/<@=savedRcp.profileImg@>" class="profile_img">
                                         <span class="profile_name"><@=savedRcp.nickname@></span>
                                     </div><!-- profile_area end -->
                                     <div class="recipe_area">

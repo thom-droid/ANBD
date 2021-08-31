@@ -2,6 +2,17 @@
  * 
  */
 
+const $openedRcpUl =$(".mypage_opened_recipe_tab.tab_wrap ul");
+
+const $myRcpsUl = $(".mypage_myrecipe_tab.tab_wrap ul");
+
+const $tmpRcpsUl = $(".mypage_tmp_recipe_tab.tab_wrap ul");
+
+
+	
+let openedRcpNo =0;
+let rcpsOpenNo = 0;
+
 const mypageRecipe = {
 	init : function(){
 		
@@ -26,12 +37,24 @@ const mypageRecipe = {
 			_this.deleteTmpRecipe(param);
 		}) ;
 		
+		// get opened recipes
+		$(".open_recipe").on('click', function(){
+			_this.getOpenedRecipes();
+		});
+		
+		// review template 
+		$openedRcpUl.on("click", ".recipe_review_btn", function(){
+			const $this = $(this);
+			//팝업 시 레시피 정보 보여주기 위해 레시피 번호 얻어옴
+        	openedRcpNo = $this.closest("div.box").find(".opened_rcp_no").val();
+			_this.popupReviewTemplateForRecipe();
+		});
+		
 	},
 	
 	getMyRcps : function(){
-		
+
 		const myRcpsTmpl = _.template($("#myRcpsTmpl").html());
-		const $myRcpsUl = $(".mypage_myrecipe_tab.tab_wrap ul");
 		
 		$.ajax({
 			url: '/mypage/ajax/myrecipes',
@@ -47,9 +70,8 @@ const mypageRecipe = {
 	},
 	
 	getTmpRcps : function(){
-		
+
 		const tmpRcps = _.template($("#tmpRcpsTmpl").html());
-		const $tmpRcpsUl = $(".mypage_tmp_recipe_tab.tab_wrap ul");
 		
 		$.ajax({
 			url: "/mypage/ajax/tmp_recipes",	
@@ -83,69 +105,47 @@ const mypageRecipe = {
 				
 			});
 		}
-	}
+	},
 	
-}
-	
-	/* ================================ 열람 레시피 =============================== */
-	
-	const openedRcpTmpl = _.template($("#openedRcpsTmpl").html());
-	const $openedRcpUl =$(".mypage_opened_recipe_tab.tab_wrap ul");
-	
-	function getOpenedRcpAjax(){
+	getOpenedRecipes : function(){
+
+		
+		const openedRcpTmpl = _.template($("#openedRcpsTmpl").html());
 		
 		$.ajax({
-			url:"/ajax/mypageOpenedRcps.ktx",
+			url:"/mypage/ajax/opened_recipes",
 			type:"GET",
 			dataType: "JSON",
-			error:function(){alert("no");	},
+			error:function(){alert("something went wrong");	},
 			success: function(json){
-				//alert("success");
-				//console.log(json);
+				console.log(json);
 				$openedRcpUl.html(openedRcpTmpl({openedRcps:json}));
-				}
-		}); // ajax
-	}
-	getOpenedRcpAjax();
+			}
+		}); 
+	},
 	
-	/* ============================= 요리후기 팝업 ===================================== */
-	const rvFormTmpl = _.template($("#rvFormTmpl").html());
-	
-    
-    let openedRcpNo =0;
-    // 제출용 파라미터
-    let rcpsOpenNo = 0;
-	
-    // 요리후기 팝업
-    $openedRcpUl.on("click", ".recipe_review_btn", function(){
-    	const $this = $(this);
-    	
-        //팝업 시 레시피 정보 보여주기 위해 레시피 번호 얻어옴
-        openedRcpNo = $this.closest("div.box").find(".opened_rcp_no").val();
-        // console.log(openedRcpNo);
+	popupReviewTemplateForRecipe : function(){
+		
+		const rvFormTmpl = _.template($("#rvFormTmpl").html());
+		
         $.ajax({
-			url:"/ajax/rcpForRv.ktx",
+			url:"/mypage/ajax/recipes_for_review/"+openedRcpNo,
 			type:"GET",
-			data: {openedRcpNo: openedRcpNo},
 			dataType: "JSON",
 			error:function(){alert("no");	},
 			success: function(json){
-				// alert("success");
-				// console.log(openedRcp);
 				
-				// 레시피 열람번호 파라미터 저장
 				rcpsOpenNo = json.rcpsOpenNo;
-				
-				// console.log("열람번호: "+ rcpsOpenNo);
-				// 받아온 json을 템플릿에 값으로 추가하고 body 요소에 append
 				$("body").html(rvFormTmpl({openedRcp: json}));
 				
-				// append한 뒤 (html에 추가된 뒤에) 클래스 붙여서 팝업 띄움
+				// append template to body before popup class is appended to it  
 				$(".review_popup_overlay").addClass('show_popup');
 			}
-		}); // ajax
-        
-    });
+		}); 
+	}
+	
+	
+}
     
     // 요리후기 이미지 첨부
     // 이미지 파라미터값 저장

@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.ktx.ddep.dao.recipe.RcpsDAO;
+import com.ktx.ddep.dao.recipe.RcpsOpenDAO;
 import com.ktx.ddep.dto.recipe.Rcp;
+import com.ktx.ddep.dto.recipe.RcpRv;
 
 import lombok.RequiredArgsConstructor;
 
@@ -14,7 +16,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class RecipesServiceImpl implements RecipesService {
 	
-	private final RcpsDAO rcpsDAO;
+	private final RcpsDAO rcpsDao;
+	
+	private final RcpsOpenDAO rcpsOpenDao;
 	
 	@Override
 	public Map<String, Object> getRecipes(int page, String choice, String keyword) {
@@ -25,9 +29,52 @@ public class RecipesServiceImpl implements RecipesService {
 	
 	@Override
 	public List<Rcp> getRecipesByMemberNo(int memberNo) {
-		
-		return rcpsDAO.selectMyRcps(memberNo);
-		
+		try {
+			return rcpsDao.selectMyRcps(memberNo);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public List<Rcp> getTmpRecipesByMemberNo(int memberNo) {
+		try {
+			return rcpsDao.selectTmpRcps(memberNo);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
+
+	@Override
+	public int removeTmpRecipesByRecipeNo(int no) {
+		// by deleting tmp rcp, all child records in relevant table are deleted 
+		return rcpsDao.deleteTmpRcps(no);
+	}
+
+
+	@Override
+	public List<RcpRv> getOpenedRecipesByMemberNo(int memberNo) {
+		try {
+			return rcpsOpenDao.selectOpenedRcps(memberNo);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+
+	@Override
+	public RcpRv getOpenedRecipesForReview(RcpRv rcpRv) {
+		try {
+			return rcpsOpenDao.selectOpenedRcpForRv(rcpRv);
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 

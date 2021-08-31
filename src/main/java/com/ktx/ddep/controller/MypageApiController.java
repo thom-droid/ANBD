@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ktx.ddep.dto.member.SessionUser;
 import com.ktx.ddep.dto.recipe.Rcp;
+import com.ktx.ddep.dto.recipe.RcpRv;
 import com.ktx.ddep.security.LoginUser;
 import com.ktx.ddep.service.RecipesService;
 
@@ -58,6 +59,32 @@ public class MypageApiController {
 		return 0;
 	}
 	
-
+	@GetMapping("/mypage/ajax/opened_recipes")
+	public List<RcpRv> getOpenedRecipes(@LoginUser SessionUser user){
+		if(user!= null) {
+			int memberNo = user.getNo();
+			
+			return recipesService.getOpenedRecipesByMemberNo(memberNo); 
+		}
+		
+		return null;
+	}
+	
+	@GetMapping("/mypage/ajax/recipes_for_review/{openedRcpNo}")
+	public RcpRv getOpenedRecipeForReview(@PathVariable("openedRcpNo") int openedRcpNo, @LoginUser SessionUser user) {
+		if(openedRcpNo != 0 || user!=null) {
+			
+			int memberNo = user.getNo();
+			RcpRv rcpRv = RcpRv.builder()
+					.openedRcpNo(openedRcpNo)
+					.memberNo(memberNo)
+					.build();
+			
+			return recipesService.getOpenedRecipesForReview(rcpRv);
+		}
+		
+		
+		return null;
+	}
 	
 }

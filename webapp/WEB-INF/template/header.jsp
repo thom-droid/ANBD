@@ -18,7 +18,7 @@
 				<a class="circle recipe_regist" title="레시피 작성하기"
 				href="/recipeRegisterPage.jsp"><i class="fas fa-pen"></i></a> <span
 				class="circle user"><img class="circle_user_img"
-				src="resources/static/img/profileImg/profile.jpg"></span>
+				src="resources/static/img/members/profile/${sessionScope.loggedInUser.profileImg}"></span>
 		</c:otherwise>		
 
 		</c:choose>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ktx.ddep.dao.member.MemberRoleDAO">
+	<insert id="insertMemberRole" parameterType="MemberRole">
+		INSERT into members_role(no, member_no, role_name, regdate)
+		VALUES (MEMBERS_SEQ.nextval, #{memberNo}, #{roleName}, systimestamp)
+	</insert>
+</mapper>
+

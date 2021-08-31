@@ -48,9 +48,7 @@ public class MypageApiControllerTest {
 	@Mock
 	private List<Rcp> rcpList;
 	
-	private MockHttpSession mockedSession;
-	
-	private HttpServletRequest req = new MockHttpServletRequest();
+	// private MockHttpSession mockedSession;
 	
 	private MockMvc mockMvc;
 	
@@ -59,11 +57,11 @@ public class MypageApiControllerTest {
 		MockitoAnnotations.openMocks(this);
 		mockMvc = MockMvcBuilders.standaloneSetup(apiController).build();
 		
-		mockedSession = (MockHttpSession) req.getSession();
+		// mockedSession = (MockHttpSession) req.getSession();
 	}
 	
 	@Test
-	public void givenMemberNo_whenGetRequest_thenIsJsonReturned() throws Exception {
+	public void givenUserInfo_whenGetRequest_thenIsStatusOk() throws Exception {
 		
 		//given
 		SessionUser user = SessionUser.builder()
@@ -76,10 +74,11 @@ public class MypageApiControllerTest {
 				.profileImg("profile.jpg")
 				.build();
 		
+		//when
 		when(apiController.getMyRecipes(user)).thenReturn(rcpList);
 		
+		//then
 		mockMvc.perform(get("/mypage/ajax/myrecipes")).andExpect(status().isOk()).andDo(print());
-		
 		
 	}
 	

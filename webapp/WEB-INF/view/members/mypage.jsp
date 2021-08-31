@@ -7,9 +7,7 @@
     <title>마이페이지</title>
     <%@ include file="/WEB-INF/template/link.jsp" %>
     <link rel="stylesheet" href="resources/static/css/mypage.css">
-    <link rel="stylesheet" href="resources/static/css/mypageReview.css">
-    <link rel="stylesheet" href="resources/static/css/header.css">
-
+    <link rel="stylesheet" href="resources/static/css/mypageRecipe.css">
 
 </head>
 <body>
@@ -21,18 +19,20 @@
         <div class="profile_wrap" >
             <div class="profile_img_area">
                     <div class="profile_img_and_label">
-                        <img id="profileImage" class="profile_img_big" src="resources/static/img/anbd_resources/homeless_dog.png"/>
+                        <img id="profileImage" class="profile_img_big" src="resources/static/img/members/profile/${sessionScope.loggedInUser.profileImg}"/>
                         <label class="profile_img_label" for="profileImg">이미지 변경</label>
                         <input type="file" accept="image/*" id="profileImg" class="filter_radio" />
                         <label class="set_default_img">기본 이미지</label>
                     </div>
             </div>
             <div class="user_info_area">
+            	<c:if test="${sessionScope.loggedInUser.marketkeeperStep eq 109}">
                 <div class="space marketkeeper">
                 	<p>장터지기</p>
                 </div>
+                </c:if>
                 <div class="nickname_title">
-                    <h3>닉네임</h3>
+                    <h3>${sessionScope.loggedInUser.nickname }</h3>
                 </div>
                 <div class="user_addr">
                     <div id="userAddress">
@@ -41,10 +41,10 @@
                 </div>
                 <div class="point_and_rank">
                     <div class="user_curr_points">
-                        <p>  p</p>
+                        <p> ${memberRank.currPoints } p</p>
                     </div>
                     <div class="user_rank">
-                        <p> rank?</p>
+                        <p> ${memberRank.rankNum } 위</p>
                     </div>
                 </div>
             </div>
@@ -492,7 +492,7 @@
                    	 <li>
                         <div class="box">
                             <a href="/recipeDetailPage?no=<@=myRcp.no@>">
-                                <img src="/img/<@=myRcp.img@>" />
+                                <img src="resources/static/img/recipes/recipes/<@=myRcp.img@>" />
                                 <div class="title_rate">
                                     <div class="title_area">
                                             <p class="subtitle">12900p로 만드는</p>
@@ -500,14 +500,14 @@
                                     </div> <!--title_area end-->
 							</a>
                                     <div class="rate_area">
-                                        <img src="img/golden_egg.png" />
+                                        <img src="resources/static/img/recipes/golden_egg.png" />
                                         <span class="rate_point"> 72%</span>
                                     </div> <!--rate_area end-->
                                 </div> <!--title_rate end-->
 
                                     <div class="profile">
                                         <div class="profile_area">
-                                            <img src="/img/profile/<@=myRcp.profileImg@>" class="profile_img">
+                                            <img src="resources/static/img/members/profile/<@=myRcp.profileImg@>" class="profile_img">
                                             <span class="profile_name"><@=myRcp.nickname@></span>
                                         </div><!-- profile_area end -->
                                         <div class="recipe_area">
@@ -532,7 +532,7 @@
 				<li>
 						<div class="box">
 							<input type="hidden" class="tmp_rcp_no" name="tmpRcpNo" value="<@=tmpRcp.no@>" />
-							<img src="/img/<@=tmpRcp.img@>" />
+							<img src="resources/static/img/recipes/recipes/<@=tmpRcp.img@>" />
 								<div class="title_rate">
 									<div class="title_area">
 										<p class="subtitle"></p>
@@ -541,7 +541,7 @@
 									<!--title_area end-->
 
 									<div class="rate_area">
-										<img src="img/golden_egg.png" /> <span class="rate_point"></span>
+										<img src="resources/static/img/recipes/golden_egg.png" /> <span class="rate_point"></span>
 									</div>
 									<!--rate_area end-->
 								</div> <!--title_rate end-->
@@ -716,6 +716,7 @@
 <script src="resources/static/js/underscore-min.js"></script>
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9d5ced193edd27557afd086a710c1ebd&libraries=services"></script>
+<script src="resources/static/js/header.js"></script>
 <script src="resources/static/js/mypage.js"></script>
 <script src="resources/static/js/mypage_recipe.js"></script>
 </body>

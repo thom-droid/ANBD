@@ -50,10 +50,9 @@ public interface MembersDAO {
 		// 2021-01-31 02:23 이소현
 		public List<Address> selectUserLocation(int no);// selectCheckEmail() end
 
-		/* ■□■□■□■□■□■□ 0202부터 신규 작성 □■□■□■□■□■□■ */
 
 		// 2021-02-02 13:48 양 프로필 이미지 업데이트
-		public int updateProfileImg(Member member);// updateProfileImg() end
+		public Integer updateProfileImg(Member member);// updateProfileImg() end
 
 		// 2021-02-02 13:49 양 프로필 기본이미지로 업데이트
 		public int updateProfileImgDefault(int no);// updateProfileImgDefault() end

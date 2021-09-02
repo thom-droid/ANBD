@@ -27,11 +27,65 @@ const main = {
 			_this.underbar(822);
 			$("#mypageQuestion").removeClass("hidden");
 		});
+		
+		  
+    	// profile change event
+    	$('#profileImg').on("change",function(){
+   
+		const file = this.files[0];
+		_this.updateProfileImage(file);
+
+		});
+		
 	},
 	
 	underbar : function(x){
 		$("#mypageContent").children().addClass("hidden");
 		$(".tab_under_bar").css("left",x+"px")
+	},
+	
+	updateProfileImage : function(file){
+		
+		if (file.size===0) {
+			alert("제대로 된 파일을 선택하시오. -_-;");
+			return;
+		}
+		
+		//2) 파일의 종류가 image
+		if (!file.type.includes("image/")) {
+			//파일이 image가 아닐때
+			alert("이미지를 선택해주시오. -_-;");
+			return;
+		}
+
+		//3) FormData객체 생성
+		const formData = new FormData();
+
+		//4) formdata에 파라미터를 추가
+
+		//파일을 append
+		formData.append("profileImage", file, file.name);
+
+		$.ajax({
+			url : "/mypage/ajax/update_profile",
+			type : "POST",
+			processData : false,
+			contentType : false,
+			data : formData,
+			dataType : "json",
+			error : function() {
+				alert("서버 점검중!")
+			},
+			success : function(json) {
+
+				//img요소의 src속성을 넘어온 이미지로 변경 
+				$('#profileImage').attr("src", "resources/static/img/members/profile/" + json.profileImage);
+				
+				//header의 이미지도 변경
+				$(".circle_user_img").attr("src", "resources/static/img/members/profile/" + json.profileImage);
+
+			}
+		});
 	}
 }
 
@@ -199,17 +253,7 @@ const main = {
     }
 
     //닉네임 클릭시 input창 보여주기
-    $mypage_user_nickname.on("click",function(){
-
-        $nickname_box.removeClass("hidden");
-
-        //input에 포커스를 맞추고 값을 현재 유저이름으로 변경
-        $nickname.val($mypage_user_nickname.text());
-
-        //◆◆◆◆◆◆◆◆◆◆ⓦⓗⓨ??? 어차피 유저 닉네임은 서버에서 가져올 것이지만 두번 출력되는 이유를 모르겠음! 해결했음!◆◆◆◆◆◆◆◆◆◆
-        //alert($user_nickname.text());
-        $nickname.focus();
-    })
+    
 
 
     //input focus 벗어날 시 현재 값을 지우고 숨기기
@@ -371,58 +415,7 @@ const main = {
     });
     
     //■■■21-02-02 양 10:09 ajax를 활용한 프로필 업로드■■■//
-    
-    //프로필 변경시
-    $profile.on("change",function(){
-   
-		const file = this.files[0];
-
-		if (file.size===0) {
-			alert("제대로 된 파일을 선택하시오. -_-;");
-			return;
-		}//if end
-		
-		//2) 파일의 종류가 image
-		if (!file.type.includes("image/")) {
-			//파일이 image가 아닐때
-			alert("이미지를 선택해주시오. -_-;");
-			return;
-		}//if end
-
-		//3) FormData객체 생성
-		const formData = new FormData();
-
-		//4) formdata에 파라미터를 추가
-
-		//?type=P 파라미터
-		formData.append("type", "P");
-
-		//파일을 append
-		formData.append("profile", file, file.name);
-
-		$.ajax({
-			url : "/ajax/uploadProfile.json",
-			type : "post",
-			processData : false,
-			contentType : false,
-			data : formData,
-			dataType : "json",
-			error : function() {
-				alert("서버 점검중!")
-			},
-			success : function(json) {
-
-				//alert("성공!")
-
-				//img요소의 src속성을 넘어온 이미지로 변경 
-				$profileImage.attr("src", "/img/profileImg/" + json.profileName);
-				//header의 이미지도 변경
-				$(".circle_user_img").attr("src", "/img/profileImg/" + json.profileName);
-
-			}
-		});//ajax() end
-
-	})//profile change() end
+  
 
 	//■■■210202 양 10:09 ajax를 활용한 프로필 업로드 끝■■■//
 

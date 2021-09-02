@@ -161,32 +161,30 @@ const mypageRecipe = {
 			const formData = new FormData();
 			
 			// "rvImg" 속성명을 부여, file.name을 파라미터 값으로 설정
-			formData.append("rvImg",file,file.name)
+			formData.append("reviewImage",file,file.name)
 			
 			$.ajax({
-				url:"/ajax/uploadRvImg.ktx",
+				url:"/mypage/ajax/upload_review_image",
 				type:"POST",
 				dataType:"JSON",
 				processData : false,//multipart/form-data
                 contentType : false,//multipart/form-data
                 data : formData,//multipart/form-data
-				error: function(){alert("안된다");},
+				error: function(){alert("something's wrong");},
 				success: function(response){
-					//alert('된다');
 					
-					// console.log("json값: " +response);
+					console.log('returned value : ' +response);
 					
 					const $rvImgUploadInput = $(".rv_img_upload_input");
 					const $i = $this.parent().find(".fas.fa-plus");
 					
 					// 리사이즈한 썸네일 이미지 보여주기
-					$("<img>").prop("src", "/img/reviewImgThumb/"+response.imgName)
+					$("<img>").prop("src", "resources/static/img/recipes/review/"+response.imgName)
 						.appendTo($this.closest("label"));
 					
 					// 파라미터로 넘길 값 설정해주기
 					$rvImgUploadInput.val(response.imgName);
 					rvImg = response.imgName;
-					// console.log("이미지파일이름: "+ rvImg);
 					
 					// 기존 i 요소 안보이게 하기
 					$i.css("display","none");

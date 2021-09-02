@@ -1,17 +1,26 @@
 package com.ktx.ddep.controller;
 
+import java.io.IOException;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.ktx.ddep.dto.ImageUploadType;
+import com.ktx.ddep.dto.member.Member;
 import com.ktx.ddep.dto.member.SessionUser;
 import com.ktx.ddep.dto.recipe.Rcp;
 import com.ktx.ddep.dto.recipe.RcpRv;
 import com.ktx.ddep.security.LoginUser;
+import com.ktx.ddep.service.MembersService;
 import com.ktx.ddep.service.RecipesService;
+import com.ktx.ddep.util.ImageUploadUtil;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +30,41 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 public class MypageApiController {
 
-	private final RecipesService recipesService; 
+	private final RecipesService recipesService;
+	private final MembersService membersService;
+	
+	@PostMapping("/mypage/ajax/update_profile")
+	public String updateProfileImage(MultipartFile profileImage, HttpServletRequest request, @LoginUser SessionUser user) throws IllegalStateException, IOException {
+		
+		try {
+			
+			String uploadPath = ImageUploadUtil.getImagePath(request, ImageUploadType.PROFILE);
+			
+			String fileName = ImageUploadUtil.uploadFileAndReturnFileName(profileImage, uploadPath);
+			
+			if(fileName != null) {
+				Member member = new Member();
+				member.setNo(user.getNo());
+				member.setProfileImg(fileName);
+				
+				log.info("no: {}, profileimg : {}", member.getNo(), member.getProfileImg());
+				
+				membersService.updateProfileImage(member);
+				
+				return "{\"profileImage\":\""+fileName+"\"}";
+			}
+			 
+			// if update is failed, then file must be deleted.
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		}
+		
+		return null;
+	}
+
 	
 	@GetMapping("/mypage/ajax/myrecipes")
 	public List<Rcp> getMyRecipes(@LoginUser SessionUser user) {
@@ -86,5 +129,20 @@ public class MypageApiController {
 		
 		return null;
 	}
+	
+	@PostMapping("/mypage/ajax/upload_review_image")
+	public String uploadReviewImage(MultipartFile reviewImage, HttpServletRequest request) throws IllegalStateException, IOException {
+		
+		String uploadPath = ImageUploadUtil.getImagePath(request, ImageUploadType.RECIPE_REVIEW);
+		
+		String fileName = ImageUploadUtil.uploadFileAndReturnFileName(reviewImage, uploadPath);
+		
+		log.info("filename is {}", fileName);
+		
+		return "{\"imgName\":\""+fileName+"\"}";
+	}
+	
+	
+	
 	
 }

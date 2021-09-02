@@ -34,24 +34,24 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class MembersServiceImpl implements MembersService {
 	
-    private final MembersDAO membersDAO;
-    private final AddressDAO addressDAO;
-    private final MemberRoleDAO memberRoleDAO;
-    private final MarketsDAO marketsDAO;
-    private final MarketTimesDAO marketTimesDAO;
+    private final MembersDAO membersDao;
+    private final AddressDAO addressDao;
+    private final MemberRoleDAO memberRoleDao;
+    private final MarketsDAO marketsDao;
+    private final MarketTimesDAO marketTimesDao;
     private final PointsDAO pointsDAO;
 
     @Override
     public Member memberInfo(int no) {
     	
-        return membersDAO.selectOne(no);
+        return membersDao.selectOne(no);
     }
     
     // retrieve user data for security
     @Override
     public UserEntity getUserForSecurity(String email) {
     	
-    	Member member = membersDAO.selectById(email);
+    	Member member = membersDao.selectById(email);
     	
     	return member.toEntity();
     }
@@ -60,7 +60,7 @@ public class MembersServiceImpl implements MembersService {
     @Override
     public List<UserRoleEntity> getUserRolesForSecurity(String email) {
     	
-    	List<MemberRole> mr = membersDAO.selectRoleById(email);
+    	List<MemberRole> mr = membersDao.selectRoleById(email);
     	List<UserRoleEntity> list = new ArrayList<UserRoleEntity>();
     	
     	for(MemberRole role: mr) {
@@ -74,13 +74,13 @@ public class MembersServiceImpl implements MembersService {
  	@Override
  	public int checkEmailDuplication(String email) {
  		
- 		return membersDAO.selectCheckEmail(email);
+ 		return membersDao.selectCheckEmail(email);
  	}
  	
  	@Override
 	public int checkNicknameDuplication(String nickname) {
  		
-		return membersDAO.selectCheckNickname(nickname);
+		return membersDao.selectCheckNickname(nickname);
 	}
 
 	// insert member
@@ -89,18 +89,18 @@ public class MembersServiceImpl implements MembersService {
 	public int addMember(Member member, Address address) {
 		
 		// 1) insert address
-		int addressResult = addressDAO.insertAddress(address);
+		int addressResult = addressDao.insertAddress(address);
 		
 		log.debug("{} insert address result", addressResult);
 		
 		// 2) when insertAddress() succeeds, call insertJoinMember()
 		member.setAddressNo(address.getNo());
-		membersDAO.insertJoinMember(member);
+		membersDao.insertJoinMember(member);
 		
 		log.debug("address No : {}", address.getNo());
 		
 		// 3) with member's number recently added, call insertMemberRole()
-		return memberRoleDAO.insertMemberRole(MemberRole.builder()
+		return memberRoleDao.insertMemberRole(MemberRole.builder()
 				.memberNo(member.getNo())
 				.roleName("ROLE_USER")
 				.build());
@@ -109,7 +109,7 @@ public class MembersServiceImpl implements MembersService {
 	// member info after sign up
 	@Override
 	public Member getMemberById(String email) {
-		return membersDAO.selectById(email);
+		return membersDao.selectById(email);
 	}
 
 	// mypage information
@@ -121,13 +121,19 @@ public class MembersServiceImpl implements MembersService {
 		int memberNo = user.getNo();
 		int memberAddrNo = user.getAddressNo();
 		
-		map.put("memberInfo", membersDAO.selectOne(memberNo));
-		map.put("market", marketsDAO.selectOne(memberNo));
-		map.put("addr", addressDAO.selectOne(memberAddrNo));
-		map.put("marketTime", marketTimesDAO.selectTime(memberNo));
-		map.put("memberRank", membersDAO.selectTotalRankerOne(memberNo));
+		map.put("memberInfo", membersDao.selectOne(memberNo));
+		map.put("market", marketsDao.selectOne(memberNo));
+		map.put("addr", addressDao.selectOne(memberAddrNo));
+		map.put("marketTime", marketTimesDao.selectTime(memberNo));
+		map.put("memberRank", membersDao.selectTotalRankerOne(memberNo));
 		
 		return map;
+	}
+
+	@Override
+	public Integer updateProfileImage(Member member) {
+		
+		return membersDao.updateProfileImg(member);
 	}
 
 	

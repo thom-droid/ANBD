@@ -36,12 +36,14 @@ import com.ktx.ddep.dao.market.MarketsDAO;
 import com.ktx.ddep.dao.member.AddressDAO;
 import com.ktx.ddep.dao.member.MemberRoleDAO;
 import com.ktx.ddep.dao.member.MembersDAO;
+import com.ktx.ddep.dao.recipe.RcpRvsDAO;
 import com.ktx.ddep.dao.recipe.RcpsDAO;
 import com.ktx.ddep.dto.member.Address;
 import com.ktx.ddep.dto.member.Member;
 import com.ktx.ddep.dto.member.MemberRole;
 import com.ktx.ddep.dto.member.SessionUser;
 import com.ktx.ddep.dto.recipe.Rcp;
+import com.ktx.ddep.dto.recipe.RcpRv;
 import com.ktx.ddep.service.MembersService;
 import com.ktx.ddep.service.MembersServiceImpl;
 
@@ -76,6 +78,9 @@ public class MemberServiceDaoTest {
 	
 	@Mock
 	RcpsDAO rcpsDao;
+	
+	@Mock
+	RcpRvsDAO rcpRvsDao;
 	
 	@Before
 	public void instantiateMock() {
@@ -221,6 +226,17 @@ public class MemberServiceDaoTest {
 		
 		verify(rcpsDao).deleteTmpRcps(anyInt());
 		
+	}
+	
+	@Test
+	public void testInsertRcpRv() {
+		
+		RcpRv rv = new RcpRv();
+		when(rcpRvsDao.insertRcpRv(rv)).thenReturn(1);
+		
+		assertThat(rcpRvsDao.insertRcpRv(rv)).isEqualTo(1);
+		
+		verify(rcpRvsDao).insertRcpRv(rv);
 	}
 	
 	

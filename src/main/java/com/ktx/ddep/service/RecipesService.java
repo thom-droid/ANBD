@@ -3,6 +3,7 @@ package com.ktx.ddep.service;
 import java.util.List;
 import java.util.Map;
 
+import com.ktx.ddep.dto.member.SessionUser;
 import com.ktx.ddep.dto.recipe.Rcp;
 import com.ktx.ddep.dto.recipe.RcpRv;
 
@@ -19,5 +20,7 @@ public interface RecipesService {
 	public List<RcpRv> getOpenedRecipesByMemberNo(int memberNo);
 
 	public RcpRv getOpenedRecipesForReview(RcpRv rcpRv);
+
+	public Integer postReview(RcpRv rcpRv, int memberNo);
 
 }

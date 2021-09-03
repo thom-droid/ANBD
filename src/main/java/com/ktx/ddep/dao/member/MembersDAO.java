@@ -71,6 +71,8 @@ public interface MembersDAO {
 		public List<Member> selectPassword();
 
 		public void updatePassword(Member m);
+
+		public Integer updatePointsForPostingRecipeReview(int memberNo);
 		
 		
 		

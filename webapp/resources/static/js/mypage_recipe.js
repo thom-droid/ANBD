@@ -12,6 +12,7 @@ const $tmpRcpsUl = $(".mypage_tmp_recipe_tab.tab_wrap ul");
 	
 let openedRcpNo =0;
 let rcpsOpenNo = 0;
+let rvImg = "";
 
 const mypageRecipe = {
 	init : function(){
@@ -136,7 +137,7 @@ const mypageRecipe = {
 			success: function(json){
 				
 				rcpsOpenNo = json.rcpsOpenNo;
-				$("body").html(rvFormTmpl({openedRcp: json}));
+				$("body").append(rvFormTmpl({openedRcp: json}));
 				
 				// append template to body before popup class is appended to it  
 				$(".review_popup_overlay").addClass('show_popup');
@@ -146,10 +147,6 @@ const mypageRecipe = {
 	
 	
 }
-    
-    // 요리후기 이미지 첨부
-    // 이미지 파라미터값 저장
-    let rvImg = "";
     
 	$("body").on("change",".rv_img_upload",function(){
 		const file = this.files[0];
@@ -180,7 +177,7 @@ const mypageRecipe = {
 					
 					// 리사이즈한 썸네일 이미지 보여주기
 					$("<img>").prop("src", "resources/static/img/recipes/review/"+response.imgName)
-						.appendTo($this.closest("label"));
+						.appendTo($this.closest("label")).addClass('thumbnail_img_for_review');
 					
 					// 파라미터로 넘길 값 설정해주기
 					$rvImgUploadInput.val(response.imgName);
@@ -260,19 +257,17 @@ const mypageRecipe = {
 		    	const paramJson = JSON.stringify(param);
 		    	// console.log(paramJson);
 		    	$.ajax({
-		    		url:"/ajax/insertRvAndPoint.ktx",
+		    		url:"/mypage/ajax/post_review",
 		    		type:"POST",
+					contentType:'application/json; charset=utf-8',
 		    		dataType:"JSON",
-		    		data: {param: paramJson},
+		    		data: JSON.stringify(param),
 		    		error: function(){alert("error");},
 		    		success: function(json){
 		    			
 		    			// 결과값 출력
-		    			alert(json.msg2);
-		    			//console.log(json.msg2);
-		    			
-		    			//완료 후 팝업 창 닫힘
-		    			$('.show_popup').removeClass('show_popup');
+		    			alert('300포인트가 적립되었습니다');
+						window.location.href = '/mypage';
 		    		}
 		    	}); //ajax
 	    	}

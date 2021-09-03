@@ -3,21 +3,27 @@ package com.ktx.ddep.service;
 import java.util.List;
 import java.util.Map;
 
+import com.ktx.ddep.dao.member.MembersDAO;
+import com.ktx.ddep.dao.member.PointsDAO;
+import com.ktx.ddep.dao.recipe.RcpRvsDAO;
 import com.ktx.ddep.dao.recipe.RcpsDAO;
 import com.ktx.ddep.dao.recipe.RcpsOpenDAO;
+import com.ktx.ddep.dto.member.Point;
 import com.ktx.ddep.dto.recipe.Rcp;
 import com.ktx.ddep.dto.recipe.RcpRv;
 
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
 public class RecipesServiceImpl implements RecipesService {
 	
 	private final RcpsDAO rcpsDao;
-	
+	private final RcpRvsDAO rcpRvsDao;
+	private final PointsDAO pointsDao;
 	private final RcpsOpenDAO rcpsOpenDao;
 	
 	@Override
@@ -75,6 +81,27 @@ public class RecipesServiceImpl implements RecipesService {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	
+
+	@Override
+	@Transactional
+	public Integer postReview(RcpRv rcpRv, int memberNo) {
+		try {
+			// insert recipe review
+			int result1 = rcpRvsDao.insertRcpRv(rcpRv);
+			
+			// insert point for reviewing
+			Point point = new Point(memberNo, rcpRv.getNo());
+			int result2 = pointsDao.insertRvPoint(point);
+			
+			return result1 + result2;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 
 

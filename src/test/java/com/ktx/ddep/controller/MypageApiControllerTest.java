@@ -1,17 +1,16 @@
 package com.ktx.ddep.controller;
 
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import static org.mockito.ArgumentMatchers.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -21,12 +20,14 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockHttpSession;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ktx.ddep.config.test.ApiTestConfig;
 import com.ktx.ddep.config.test.MvcTestConfig;
@@ -39,7 +40,7 @@ import com.ktx.ddep.service.RecipesService;
 @Transactional
 public class MypageApiControllerTest {
 
-	@InjectMocks
+	@Mock
 	private MypageApiController apiController;
 	
 	@Mock
@@ -82,4 +83,23 @@ public class MypageApiControllerTest {
 		
 	}
 	
+	@Test
+	public void givenMultipartFile_whenPostRequest_thenIsFileNameturned() throws Exception {
+		//given 
+		
+		// multipartFile
+		MockMultipartFile mockMultipart = new MockMultipartFile("MockReviewImage", "jihyo.jpg".getBytes());
+		
+		// when 
+		when(apiController.uploadReviewImage(Mockito.any(MultipartFile.class), Mockito.any(HttpServletRequest.class))).thenReturn("String");
+		
+		assertNotNull(mockMultipart);
+		
+		// then
+		
+		mockMvc.perform(MockMvcRequestBuilders.multipart("/mypage/ajax/upload_review_image").file(mockMultipart)
+				.characterEncoding("UTF-8")).andExpect(status().isOk())
+				.andDo(print());
+		
+	}
 }

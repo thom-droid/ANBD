@@ -44,7 +44,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	
 	<!--21-02-03 17:54 양 주소 업데이트  -->
-	<select id="updateAddress" parameterType="Address" resultType="Address">
+	<select id="updateAddress" parameterType="Address">
 	UPDATE address
 	SET sido= #{sido}, gugun=#{gugun}, dong=#{dong}, lat=#{lat} , lng=#{lng} ,regdate=systimestamp
 	WHERE no=#{no}

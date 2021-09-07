@@ -22,5 +22,7 @@ public interface MembersService extends UserDbService{
 	public Map<String, Object> getMypageInfoByMember(SessionUser user);
 
 	public Integer updateProfileImage(Member member);
+
+	public Integer updateAddress(Address address);
     
 }

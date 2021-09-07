@@ -413,18 +413,6 @@ const main = {
             })
         
     });
-    
-    //■■■21-02-02 양 10:09 ajax를 활용한 프로필 업로드■■■//
-  
-
-	//■■■210202 양 10:09 ajax를 활용한 프로필 업로드 끝■■■//
-
-	//--■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■지도■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■--//
-	//본 예제에서는 도로명 주소 표기 방식에 대한 법령에 따라, 내려오는 데이터를 조합하여 올바른 주소를 구성하는 방법을 설명합니다.
-
-	
-
-	
 	
 
 	function sample4_execDaumPostcode() {
@@ -477,22 +465,32 @@ const main = {
 			            //좌표값 저장하기
 			            lat = result[0].y;
                         lng = result[0].x;
-                     /*    
-                        console.log("작동!");
                         
                         console.log("1 :"+sido);
                 	    console.log(gugun);
                 	    console.log(dong);
                 	    console.log(lat);
-                	    console.log(lng); */
+                	    console.log(lng);
+
+						const jsonData = {
+							
+							"sido": sido, 
+							"gugun":gugun, 
+							"dong":dong, 
+							"lat":lat, 
+							"lng":lng 
+							
+						};
+						
                         
                         
                         //ajax로 데이터 전송
                         $.ajax({
-							url:"/ajax/updateAddress.json",//주소
-							type:"get",//방식
-							data:{"sido": sido, "gugun":gugun, "dong":dong, "lat":lat, "lng":lng },//넘길 파라미터 이름
-							dataType:"text",//응답의 자료형
+							url:"/mypage/ajax/update_address",//주소
+							type:"PUT",//방식
+							data:JSON.stringify(jsonData),
+							contentType: "application/json;charset=utf-8",
+							dataType:"json",//응답의 자료형
 							error:function(xhr,error){ //받아오기 실패시
 								alert("서버 점검중!");
 								console.log(error);

@@ -73,7 +73,7 @@ public interface MembersDAO {
 		public void updatePassword(Member m);
 
 		public Integer updatePointsForPostingRecipeReview(int memberNo);
-		
-		
+
+		public Integer selectAddressNoByMemberNo(int memberNo);
 		
 }

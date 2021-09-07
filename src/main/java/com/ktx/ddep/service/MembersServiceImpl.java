@@ -136,6 +136,11 @@ public class MembersServiceImpl implements MembersService {
 		return membersDao.updateProfileImg(member);
 	}
 
+	@Override
+	public Integer updateAddress(Address address) {
+		return addressDao.updateAddress(address);
+	}
+
 	
 	
 	

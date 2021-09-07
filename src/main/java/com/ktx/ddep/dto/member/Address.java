@@ -77,14 +77,12 @@ public class Address {
 	
 	
 	// used for getDong
-	@Builder
 	public Address(String sido, String gugun) {
 		this.sido = sido;
 		this.gugun = gugun;
 	}
 	
 	// used for getMarketList
-	@Builder
 	public Address(String sido, String gugun, String dong) {
 		this.sido = sido;
 		this.gugun = gugun;

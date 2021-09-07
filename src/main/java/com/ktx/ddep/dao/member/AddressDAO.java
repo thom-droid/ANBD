@@ -19,7 +19,7 @@ public interface AddressDAO {
 	public int insertAddress(Address address);
 	
 	//2021-02-03 17:55 양 주소 업데이트
-	public int updateAddress(Address address);
+	public Integer updateAddress(Address address);
 	
 	//21-02-02 이소현
 	public List<String> selectSidoList();

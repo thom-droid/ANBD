@@ -3,7 +3,6 @@ package com.ktx.ddep.service;
 import java.util.List;
 import java.util.Map;
 
-import com.ktx.ddep.dao.member.MembersDAO;
 import com.ktx.ddep.dao.member.PointsDAO;
 import com.ktx.ddep.dao.recipe.RcpRvsDAO;
 import com.ktx.ddep.dao.recipe.RcpsDAO;
@@ -83,7 +82,10 @@ public class RecipesServiceImpl implements RecipesService {
 		}
 	}
 
-	
+	@Override
+	public List<Rcp> getSavedRecipesByMemberNo(int memberNo) {
+		return rcpsDao.selectSavedRcps(memberNo);
+	}
 
 	@Override
 	@Transactional
@@ -103,6 +105,9 @@ public class RecipesServiceImpl implements RecipesService {
 		
 		return null;
 	}
+
+
+	
 
 
 }

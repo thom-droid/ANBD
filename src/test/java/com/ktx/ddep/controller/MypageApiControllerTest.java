@@ -1,5 +1,6 @@
 package com.ktx.ddep.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -114,6 +115,21 @@ public class MypageApiControllerTest {
 		mockMvc.perform(put("/mypage/ajax/update_address").contentType(MediaType.APPLICATION_JSON).content(asJsonString(addrObj)))
 		.andExpect(status().isOk()).andDo(print());
 		
+	}
+	
+
+	@Test
+	public void getSavedRecipesTest() throws Exception {
+		
+		SessionUser user = mock(SessionUser.class);
+	
+		when(apiController.getSavedRecipes(user)).thenReturn(rcpList);
+		
+		mockMvc.perform(get("/mypage/ajax/saved_recipes"))
+		.andExpect(status().isOk())
+		.andDo(print());
+		
+		assertThat(apiController.getSavedRecipes(user)).isEqualTo(rcpList);
 	}
 	
 	

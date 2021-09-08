@@ -1,11 +1,6 @@
 package com.ktx.ddep.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.hamcrest.CoreMatchers.any;
-import static org.hamcrest.CoreMatchers.anything;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -13,10 +8,7 @@ import static org.mockito.Mockito.when;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.anyInt;
 
@@ -44,8 +36,6 @@ import com.ktx.ddep.dto.member.MemberRole;
 import com.ktx.ddep.dto.member.SessionUser;
 import com.ktx.ddep.dto.recipe.Rcp;
 import com.ktx.ddep.dto.recipe.RcpRv;
-import com.ktx.ddep.service.MembersService;
-import com.ktx.ddep.service.MembersServiceImpl;
 
 /**
  * test class for Dao classes to see if they work properly either in transactional context or alone.  

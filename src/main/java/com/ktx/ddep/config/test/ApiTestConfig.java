@@ -11,6 +11,8 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.ktx.ddep.config.ContextDataSource;
 import com.ktx.ddep.config.ContextSqlMapper;
@@ -22,13 +24,18 @@ import com.ktx.ddep.config.ContextSqlMapper;
 public class ApiTestConfig {
 
 	@Bean
-    public PasswordEncoder encoder() {
-        return new BCryptPasswordEncoder();
-    }
-	
+	public PasswordEncoder encoder() {
+		return new BCryptPasswordEncoder();
+	}
+
 	@Bean
 	public HttpSession sessionCreator() {
 		return new MockHttpSession();
 	}
-	
+
+	@Bean
+	public MultipartResolver multipartResolver() {
+		
+		return new CommonsMultipartResolver();
+	}
 }

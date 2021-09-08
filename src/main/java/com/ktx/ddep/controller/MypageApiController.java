@@ -133,6 +133,15 @@ public class MypageApiController {
 		return null;
 	}
 	
+	@GetMapping("/mypage/ajax/saved_recipes")
+	public List<Rcp> getSavedRecipes(@LoginUser SessionUser user){
+			
+		if(user!= null)
+			return recipesService.getSavedRecipesByMemberNo(user.getNo());
+		
+		return null;
+	}
+	
 	@PostMapping("/mypage/ajax/upload_review_image")
 	public String uploadReviewImage(MultipartFile reviewImage, HttpServletRequest request) throws IllegalStateException, IOException {
 		
